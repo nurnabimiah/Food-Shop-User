@@ -9,7 +9,6 @@ import '../../presentation/color_manager.dart';
 import '../../widgets/container_decoration.dart';
 import 'registration_screen.dart';
 
-
 class AuthScreen extends StatefulWidget {
   const AuthScreen({Key? key}) : super(key: key);
 
@@ -82,6 +81,11 @@ class _AuthScreenState extends State<AuthScreen> {
         await sPref!.setString("email", snapShot.data()!["userEmail"]);
         await sPref!.setString("name", snapShot.data()!["userName"]);
         await sPref!.setString("photoUrl", snapShot.data()!["userPhotoUrl"]);
+
+        //from firestore the data come as dynamic so here need to be casted 
+        List<String> userCartList = snapShot.data()!["userCart"].cast<String>();
+        await sPref!.setStringList("userCart", userCartList);
+
         Navigator.pop(context);
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => const UserHomeScreen()));
@@ -89,12 +93,13 @@ class _AuthScreenState extends State<AuthScreen> {
         firebaseAuth.signOut();
         Navigator.pop(context);
         showDialog(
-          context: context,
-          builder: (context) {
-            return ErrorDialog(
-              message: "There is no user record corresponding to this identifier. The user may have been deleted.",
-            );
-          });
+            context: context,
+            builder: (context) {
+              return ErrorDialog(
+                message:
+                    "There is no user record corresponding to this identifier. The user may have been deleted.",
+              );
+            });
       }
     });
   }
@@ -136,7 +141,7 @@ class _AuthScreenState extends State<AuthScreen> {
                             keyboardType: TextInputType.emailAddress,
                             decoration: const InputDecoration(
                               //isCollapsed: true,
-                              // isDense: true, 
+                              // isDense: true,
                               contentPadding: EdgeInsets.symmetric(
                                   horizontal: 2, vertical: 2),
                               border: OutlineInputBorder(
@@ -212,51 +217,51 @@ class _AuthScreenState extends State<AuthScreen> {
                     //   boxShadowColorDown: ColorManager.blue3,
                     // ),
                     ElevatedButton(
-                        child: const Text(
-                          "Sing In",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
+                      child: const Text(
+                        "Sing In",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
                         ),
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.purple[300],
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 50, vertical: 10),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            side: BorderSide(color: ColorManager.depOrange1),
-                          ),
-                        ),
-                        onPressed: () {
-                         _formValidation();
-                        },
                       ),
-                      ElevatedButton(
-                        child: const Text(
-                          "Sing Up",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.purple[300],
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 50, vertical: 10),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: BorderSide(color: ColorManager.depOrange1),
                         ),
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.purple[300],
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 50, vertical: 10),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            side: BorderSide(color: ColorManager.depOrange1),
-                          ),
+                      ),
+                      onPressed: () {
+                        _formValidation();
+                      },
+                    ),
+                    ElevatedButton(
+                      child: const Text(
+                        "Sing Up",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
                         ),
-                        onPressed: () {
-                          Navigator.push(
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.purple[300],
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 50, vertical: 10),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: BorderSide(color: ColorManager.depOrange1),
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => const RegistrationScreen()),
                         );
-                        },
-                      ),
+                      },
+                    ),
                   ],
                 ),
               ),

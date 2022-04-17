@@ -154,7 +154,23 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               slivers: [
                 SliverAppBar(
                   actions: [
-                    IconButton(onPressed: () {}, icon: Icon(Icons.favorite)),
+                    Stack(
+                      children: [
+                        IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Icons.shopping_cart),
+                        ),
+                        const Positioned(
+                          top: 3,
+                          right: 10,
+                          child: Center(
+                              child: Text(
+                            "0",
+                            style: TextStyle(color: Colors.white, fontSize: 13),
+                          )),
+                        )
+                      ],
+                    ),
                   ],
                   //appbar will not disapper
                   pinned: true,
@@ -410,7 +426,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                 ),
               ],
             );
-            
+
             /*: NoInternet();*/
           }
           return const Center(

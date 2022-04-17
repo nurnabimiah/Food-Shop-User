@@ -172,6 +172,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       //trim() = for removing extra space
       "userName": nameController.text.trim(),
       "userPhotoUrl": userImageUrl,
+      "userCart" : ['garbageValue'],
     });
     //save data locally with sharedPrefernces
     sPref = await SharedPreferences.getInstance();
@@ -181,6 +182,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     await sPref!.setString("email", currentUser.email.toString());
     await sPref!.setString("name", nameController.text.trim());
     await sPref!.setString("photoUrl", userImageUrl!);
+    await sPref!.setStringList("userCart", ['garbageValue']);
   }
 
   @override
