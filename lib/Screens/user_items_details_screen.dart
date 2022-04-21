@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:foodfair/models/items.dart';
+import 'package:foodfair/widgets/my_appbar.dart';
 import 'package:number_inc_dec/number_inc_dec.dart';
 
 import '../global/add_item_to_cart.dart';
@@ -20,9 +22,11 @@ class _UserItemsDetailsScreenState extends State<UserItemsDetailsScreen> {
   int itemCounter = 1;
   @override
   Widget build(BuildContext context) {
-    print("mutton burger itemId = ${widget.itemModel!.itemID} + (1650134716838673) VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV ()");
+    print(
+        "mutton burger itemId = ${widget.itemModel!.itemID} + (1650134716838673) VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV ()");
     return Scaffold(
-      appBar: AppBar(
+      appBar: MyAppBar(/*sellerUID: widget.itemModel!.sellerUID*/),
+      /*AppBar(
         title: Text(widget.itemModel!.itemTitle.toString()),
         actions: [
           Stack(
@@ -45,7 +49,7 @@ class _UserItemsDetailsScreenState extends State<UserItemsDetailsScreen> {
             ],
           ),
         ],
-      ),
+      ),*/
       body: ListView(
         children: [
           Image.network(widget.itemModel!.itemImageUrl.toString()),
@@ -115,7 +119,14 @@ class _UserItemsDetailsScreenState extends State<UserItemsDetailsScreen> {
                     borderRadius: BorderRadius.all(Radius.circular(3))),
               ),
               onPressed: () {
-                addItemToCart(widget.itemModel!.itemID, context, itemCounter);
+                List<String> separatedItemsIDList =
+                    separateItemsIdFromUserCartList();
+               // print(
+                //    " 0 separatedItemsIDList = $separatedItemsIDList + CCCCCCCCCCCCCCCCCCCCCCCCCCc");
+                separatedItemsIDList.contains(widget.itemModel!.itemID)
+                    ? Fluttertoast.showToast(msg: "Item is already in cart")
+                    : addItemToCart(
+                        widget.itemModel!.itemID, context, itemCounter);
               },
             )
           ],

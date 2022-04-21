@@ -34,31 +34,12 @@ class _UserMenusScreenState extends State<UserMenusScreen> {
         flexibleSpace: Container(
           decoration: const ContainerDecoration().decoaration(),
         ),
-        actions: [
-          Stack(
-            children: [
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.shopping_cart),
-              ),
-              const Positioned(
-                top: 3,
-                right: 10,
-                child: Center(
-                    child: Text(
-                  "0",
-                  style: TextStyle(color: Colors.white, fontSize: 13),
-                )),
-              )
-            ],
-          ),
-        ],
       ),
       //drawer: MyDrawer(),
       body: CustomScrollView(
         slivers: [
           SliverPersistentHeader(
-            pinned: true,
+            //pinned: true,
             delegate: TextWidgetHeader(
                 title: widget.sellerModel!.sellerName! + "'s menus"),
           ),

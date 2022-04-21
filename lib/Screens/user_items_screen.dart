@@ -28,12 +28,12 @@ class _UserItemsScreenState extends State<UserItemsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(),
+      appBar: MyAppBar(/*sellerUID: widget.model!.sellerUID*/),
       // drawer: MyDrawer(),
       body: CustomScrollView(
         slivers: [
           SliverPersistentHeader(
-            pinned: true,
+           // pinned: true,
             delegate:
                 TextWidgetHeader(title: widget.model!.menuTitle! + "'s items"),
           ),

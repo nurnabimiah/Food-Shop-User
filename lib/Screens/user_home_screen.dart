@@ -2,18 +2,16 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:foodfair/models/sellers_model.dart';
+import 'package:foodfair/providers/cart_item_quantity_provider.dart';
 import 'package:foodfair/widgets/my_drawer.dart';
 import 'package:foodfair/widgets/seller_profile_design.dart';
 import 'package:provider/provider.dart';
 import '../exceptions/error_dialog.dart';
-import '../global/global_instance_or_variable.dart';
 import '../presentation/color_manager.dart';
 import '../providers/internet_connectivity_provider.dart';
 import '../widgets/container_decoration.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-
 import '../widgets/loading_container.dart';
-import 'no_internet_screen.dart';
+import 'cart_screen.dart';
 
 class UserHomeScreen extends StatefulWidget {
   const UserHomeScreen({Key? key}) : super(key: key);
@@ -157,17 +155,27 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     Stack(
                       children: [
                         IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => CartScreen(
+                                        /*sellerUID: widget.sellerUID*/)));
+                          },
                           icon: const Icon(Icons.shopping_cart),
                         ),
-                        const Positioned(
+                        Positioned(
                           top: 3,
                           right: 10,
-                          child: Center(
-                              child: Text(
-                            "0",
-                            style: TextStyle(color: Colors.white, fontSize: 13),
-                          )),
+                          child: Consumer<CartItemQuanityProvider>(
+                            builder: (context, itemCounter, ch) {
+                              return Text(
+                                itemCounter.itemQuantity.toString(),
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 13),
+                              );
+                            },
+                          ),
                         )
                       ],
                     ),

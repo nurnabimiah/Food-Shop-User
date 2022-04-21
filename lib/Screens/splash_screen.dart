@@ -5,7 +5,7 @@ import 'user_home_screen.dart';
 import '../global/global_instance_or_variable.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  static final String path = "/SplashScreen";
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();

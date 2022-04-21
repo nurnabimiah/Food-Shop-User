@@ -64,9 +64,9 @@ class _SellerProfileDesignState extends State<SellerProfileDesign> {
                               child: Text(
                             "Image not found", /*style: TextStyle(height: ),*/
                           )))
-                      : /*widget.netValue == false
+                      : widget.netValue == false
                           ? LoadingContainer()
-                          : */
+                          : 
                       Image.network(
                           widget.sellerModel!.sellerAvatarUrl!,
                           height: MediaQuery.of(context).size.height * 0.3,
