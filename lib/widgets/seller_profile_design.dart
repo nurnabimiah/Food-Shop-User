@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:foodfair/Screens/user_menus_screen.dart';
 import 'package:foodfair/models/sellers_model.dart';
@@ -64,10 +65,10 @@ class _SellerProfileDesignState extends State<SellerProfileDesign> {
                               child: Text(
                             "Image not found", /*style: TextStyle(height: ),*/
                           )))
-                      : widget.netValue == false
+                      :/* widget.netValue == false
                           ? LoadingContainer()
-                          : 
-                      Image.network(
+                          : */
+                     /* Image.network(
                           widget.sellerModel!.sellerAvatarUrl!,
                           height: MediaQuery.of(context).size.height * 0.3,
                           width: MediaQuery.of(context).size.width,
@@ -85,7 +86,17 @@ class _SellerProfileDesignState extends State<SellerProfileDesign> {
                               ),
                             );
                           },
-                        ),
+                        ),*/
+
+                    CachedNetworkImage(
+                      imageUrl: widget.sellerModel!.sellerAvatarUrl!,
+                      placeholder: (context, url) =>
+                          Center(child: LoadingContainer()),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                      height: MediaQuery.of(context).size.height * 0.3,
+                      width: MediaQuery.of(context).size.width,
+                      fit: BoxFit.fill,
+                    ),
             ),
             Padding(
                 padding: const EdgeInsets.only(bottom: 0, top: 8),

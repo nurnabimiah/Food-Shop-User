@@ -1,16 +1,26 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+
 import 'package:foodfair/Screens/user_items_details_screen.dart';
+
 import '../models/items.dart';
+import '../models/menus.dart';
 import '../presentation/color_manager.dart';
 import 'loading_container.dart';
-import '../models/menus.dart';
 
 class ItemsWidget extends StatefulWidget {
   Items? itemModel;
   BuildContext? context;
   bool? netValue;
-  ItemsWidget({Key? key, this.itemModel, this.context, this.netValue})
-      : super(key: key);
+  String? sellerUID;
+  ItemsWidget({
+    Key? key,
+    this.itemModel,
+    this.context,
+    this.netValue,
+    this.sellerUID,
+  }) : super(key: key);
+     
 
   @override
   State<ItemsWidget> createState() => _ItemsWidgetState();
@@ -29,7 +39,7 @@ class _ItemsWidgetState extends State<ItemsWidget> {
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      UserItemsDetailsScreen(itemModel: widget.itemModel)));
+                      UserItemsDetailsScreen(itemModel: widget.itemModel, sellerUID: widget.sellerUID)));
         },
         splashColor: Colors.red,
         child: Column(
@@ -59,7 +69,7 @@ class _ItemsWidgetState extends State<ItemsWidget> {
                   : /*widget.netValue == false
                           ? LoadingContainer()
                           : */
-                  Image.network(
+                  /*Image.network(
                       widget.itemModel!.itemImageUrl!,
                       height: MediaQuery.of(context).size.height * 0.3,
                       width: MediaQuery.of(context).size.width,
@@ -76,6 +86,16 @@ class _ItemsWidgetState extends State<ItemsWidget> {
                           ),
                         );
                       },
+                    ),*/
+
+                  CachedNetworkImage(
+                      imageUrl: widget.itemModel!.itemImageUrl!,
+                      placeholder: (context, url) =>
+                          Center(child: LoadingContainer()),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                      height: MediaQuery.of(context).size.height * 0.3,
+                      width: MediaQuery.of(context).size.width,
+                      fit: BoxFit.fill,
                     ),
             ),
             Padding(

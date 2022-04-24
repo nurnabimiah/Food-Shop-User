@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:foodfair/models/items.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class CartWidget extends StatefulWidget {
   final Items? itemModel;
@@ -51,12 +52,18 @@ class _CartWidgetState extends State<CartWidget> {
                 //color: Colors.blue,
                 height: MediaQuery.of(context).size.height * 0.14,
                 width: MediaQuery.of(context).size.height * 0.16,
-                child: Image.network(
+                child: /*Image.network(
                   widget.itemModel!.itemImageUrl!,
                   //width: 120,
                   //height: 120,
                   //scale: 8,
                   fit: BoxFit.fill,
+                ),*/
+                    CachedNetworkImage(
+                  imageUrl: widget.itemModel!.itemImageUrl!,
+                  placeholder: (context, url) =>
+                      Center(child: CircularProgressIndicator()),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
                 ),
               ),
               const SizedBox(

@@ -3,3 +3,4 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 SharedPreferences? sPref;
 FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+String? sellerUIDD;

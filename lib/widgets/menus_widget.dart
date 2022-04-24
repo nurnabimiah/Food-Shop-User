@@ -1,16 +1,25 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+
 import 'package:foodfair/Screens/user_items_screen.dart';
 
+import '../models/menus.dart';
 import '../presentation/color_manager.dart';
 import 'loading_container.dart';
-import '../models/menus.dart';
 
 class MenusWidget extends StatefulWidget {
   Menus? model;
   BuildContext? context;
+  String? sellerUID;
   bool? netValue;
-  MenusWidget({Key? key, this.model, this.context, this.netValue})
-      : super(key: key);
+  MenusWidget({
+    Key? key,
+    this.model,
+    this.context,
+    this.sellerUID,
+    this.netValue,
+  }) : super(key: key);
+      
 
   @override
   State<MenusWidget> createState() => _MenusWidgetState();
@@ -28,7 +37,7 @@ class _MenusWidgetState extends State<MenusWidget> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => UserItemsScreen(model: widget.model)));
+                  builder: (context) => UserItemsScreen(model: widget.model, sellerUID: widget.sellerUID)));
         },
         splashColor: Colors.red,
         child: Column(
@@ -49,7 +58,7 @@ class _MenusWidgetState extends State<MenusWidget> {
                   : /*widget.netValue == false
                           ? LoadingContainer()
                           : */
-                  Image.network(
+                  /* Image.network(
                       widget.model!.menuImageUrl!,
                       height: MediaQuery.of(context).size.height * 0.3,
                       width: MediaQuery.of(context).size.width,
@@ -66,6 +75,16 @@ class _MenusWidgetState extends State<MenusWidget> {
                           ),
                         );
                       },
+                    ),*/
+
+                  CachedNetworkImage(
+                      imageUrl: widget.model!.menuImageUrl!,
+                      placeholder: (context, url) =>
+                          Center(child: LoadingContainer()),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                      height: MediaQuery.of(context).size.height * 0.3,
+                      width: MediaQuery.of(context).size.width,
+                      fit: BoxFit.fill,
                     ),
             ),
             Text(

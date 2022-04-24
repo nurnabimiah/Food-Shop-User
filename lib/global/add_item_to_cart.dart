@@ -4,7 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:foodfair/Screens/user_home_screen.dart';
 import 'package:foodfair/global/global_instance_or_variable.dart';
 import 'package:provider/provider.dart';
-import '../providers/cart_item_quantity_provider.dart';
+import '../providers/cart_item_quantity.dart';
 
 separateItemsIdFromUserCartList() {
   List<String> separateItemsIdsList = [], getPreviouslySavedItemsList = [];

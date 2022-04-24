@@ -52,6 +52,8 @@ dependencies:
   provider:
   http:
   number_inc_dec: ^0.8.0
+  url_launcher:
+  cached_network_image: ^3.2.0
 
 
 

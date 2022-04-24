@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodfair/Screens/cart_screen.dart';
-import 'package:foodfair/providers/cart_item_quantity_provider.dart';
+import 'package:foodfair/providers/cart_item_quantity.dart';
 import 'package:provider/provider.dart';
 
 import 'container_decoration.dart';

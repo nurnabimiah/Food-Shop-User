@@ -7,14 +7,14 @@ import 'package:foodfair/Screens/address_screen.dart';
 import 'package:foodfair/exceptions/progress_bar.dart';
 import 'package:foodfair/models/items.dart';
 import 'package:foodfair/presentation/color_manager.dart';
-import 'package:foodfair/providers/total_amount_provider.dart';
+import 'package:foodfair/providers/total_amount.dart';
 import 'package:foodfair/widgets/cart_widget.dart';
 import 'package:foodfair/widgets/my_appbar.dart';
 import 'package:foodfair/widgets/text_widget_header.dart';
 import 'package:provider/provider.dart';
 
 import '../global/add_item_to_cart.dart';
-import '../providers/cart_item_quantity_provider.dart';
+import '../providers/cart_item_quantity.dart';
 import '../widgets/container_decoration.dart';
 
 class CartScreen extends StatefulWidget {
@@ -83,6 +83,8 @@ class _CartScreenState extends State<CartScreen> {
               heroTag: "btn1",
               onPressed: () {
                 clearCart(context);
+                Provider.of<TotalAmountProvider>(context, listen: false)
+                    .displayTotalAmount(0);
               },
               label: const Text(
                 "Clear cart",
@@ -123,7 +125,7 @@ class _CartScreenState extends State<CartScreen> {
                     ? TextWidgetHeader(title: "Total price = Tk 0")
                     : TextWidgetHeader(
                         title:
-                            "Total price = Tk ${amountProvider.TotalAmount}"),
+                            "Total price = Tk ${amountProvider.totalAmount}"),
               );
             }),
           ),
@@ -143,7 +145,7 @@ class _CartScreenState extends State<CartScreen> {
             stream: FirebaseFirestore.instance
                 .collection("items")
                 .where("itemID", whereIn: separateItemsIdFromUserCartList())
-                .orderBy("publishedDate", descending: true)
+                .orderBy("publishedDate", descending: false)
                 .snapshots(),
             builder: (context, /* AsyncSnapshot<QuerySnapshot?> */ snapshot) {
               return !snapshot.hasData

@@ -1,51 +1,68 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:foodfair/global/global_instance_or_variable.dart';
 import 'package:foodfair/widgets/simple_appbar.dart';
 
+import '../models/address.dart';
 import '../widgets/my_text_field.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 
-class SaveAddressScreen extends StatelessWidget {
+class SaveAddressScreen extends StatefulWidget {
   static const String path = "/SaveAddressScreen";
 
+  @override
+  State<SaveAddressScreen> createState() => _SaveAddressScreenState();
+}
+
+class _SaveAddressScreenState extends State<SaveAddressScreen> {
   final _name = TextEditingController();
+
   final _phoneNumber = TextEditingController();
+
   final _flatNumber = TextEditingController();
+
   final _city = TextEditingController();
+
   final _state = TextEditingController();
+
   final _completeAddress = TextEditingController();
+
   final _locationController = TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
+
   List<Placemark>? placemarks;
+
   Position? position;
 
-    getUserLocationAddress() async
-  {
+  getUserLocationAddress() async {
     LocationPermission permission;
     permission = await Geolocator.requestPermission();
-    
+
     Position newPosition = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high
-    );
+        desiredAccuracy: LocationAccuracy.high);
 
     position = newPosition;
 
-    placemarks = await placemarkFromCoordinates(
-        position!.latitude, position!.longitude
-    );
+    placemarks =
+        await placemarkFromCoordinates(position!.latitude, position!.longitude);
 
     Placemark pMark = placemarks![0];
 
-    String fullAddress = '${pMark.subThoroughfare} ${pMark.thoroughfare}, ${pMark.subLocality} ${pMark.locality}, ${pMark.subAdministrativeArea}, ${pMark.administrativeArea} ${pMark.postalCode}, ${pMark.country}';
+    String fullAddress =
+        '${pMark.subThoroughfare} ${pMark.thoroughfare}, ${pMark.subLocality} ${pMark.locality}, ${pMark.subAdministrativeArea}, ${pMark.administrativeArea} ${pMark.postalCode}, ${pMark.country}';
 
     _locationController.text = fullAddress;
 
-    _flatNumber.text = '${pMark.subThoroughfare} ${pMark.thoroughfare}, ${pMark.subLocality} ${pMark.locality}';
-    _city.text = '${pMark.subAdministrativeArea}, ${pMark.administrativeArea} ${pMark.postalCode}';
+    _flatNumber.text =
+        '${pMark.subThoroughfare} ${pMark.thoroughfare}, ${pMark.subLocality} ${pMark.locality}';
+    _city.text =
+        '${pMark.subAdministrativeArea}, ${pMark.administrativeArea} ${pMark.postalCode}';
     _state.text = '${pMark.country}';
     _completeAddress.text = fullAddress;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +73,32 @@ class SaveAddressScreen extends StatelessWidget {
         width: MediaQuery.of(context).size.width * 0.30,
         child: FloatingActionButton.extended(
           onPressed: () {
-            // Navigator.of(context).pushNamed(SaveAddressScreen.path);
+            if (_formKey.currentState!.validate()) {
+              final addressModel = Address(
+                name: _name.text.trim(),
+                state: _state.text.trim(),
+                fullAddress: _completeAddress.text.trim(),
+                phoneNumber: _phoneNumber.text.trim(),
+                flatNumber: _flatNumber.text.trim(),
+                city: _city.text.trim(),
+                latitude: position!.latitude,
+                longitude: position!.longitude,
+              ).toJson();
+
+              FirebaseFirestore.instance
+                  .collection("users")
+                  .doc(sPref!.getString("uid"))
+                  .collection("userAddress")
+                  .doc(DateTime.now().millisecondsSinceEpoch.toString())
+                  .set(addressModel)
+                  .then((value) {
+                Fluttertoast.showToast(msg: "New Address has been saved.");
+                setState(() {
+                   _formKey.currentState!.reset();
+                });
+               
+              });
+            }
           },
           label: const Text("Done"),
           icon: const Icon(
@@ -134,7 +176,7 @@ class SaveAddressScreen extends StatelessWidget {
               ),
               onPressed: () {
                 //getCurrentLocationWithAddress
-                 getUserLocationAddress();
+                getUserLocationAddress();
               },
             ),
             Form(

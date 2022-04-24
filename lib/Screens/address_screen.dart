@@ -1,6 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:foodfair/Screens/save_address_screen.dart';
+import 'package:foodfair/exceptions/progress_bar.dart';
+import 'package:foodfair/providers/address.dart';
+import 'package:foodfair/widgets/address_widget.dart';
 import 'package:foodfair/widgets/simple_appbar.dart';
+import 'package:provider/provider.dart';
+
+import '../global/global_instance_or_variable.dart';
+import '../models/address.dart';
+import '../providers/total_amount.dart';
 
 class AddressScreen extends StatefulWidget {
   static final String path = "/AddressScreen";
@@ -26,7 +35,7 @@ class _AddressScreenState extends State<AddressScreen> {
             Icons.add_location,
             color: Colors.white,
           ),
-          backgroundColor: Colors.purple[300],
+          backgroundColor: Colors.cyan,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
             //side: const BorderSide(color: Colors.red),
@@ -34,8 +43,8 @@ class _AddressScreenState extends State<AddressScreen> {
         ),
       ),
       body: Column(
-        children: const[
-           Align(
+        children: [
+          const Align(
             alignment: Alignment.centerLeft,
             child: Padding(
               padding: EdgeInsets.all(10.0),
@@ -48,6 +57,42 @@ class _AddressScreenState extends State<AddressScreen> {
               ),
             ),
           ),
+          Consumer2<AddressProvider, TotalAmountProvider>(
+              builder: (context, address, tAmount, ch) {
+            return Flexible(
+              child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection("users")
+                    .doc(sPref!.getString("uid"))
+                    .collection("userAddress")
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  return !snapshot.hasData
+                      ? Center(
+                          child: circularProgress(),
+                        )
+                      : snapshot.data!.docs.length == 0
+                          ? Text("")
+                          : ListView.builder(
+                              itemCount: snapshot.data!.docs.length,
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                Address? addressModel = Address.fromJson(
+                                  snapshot.data!.docs[index].data()!
+                                      as Map<String, dynamic>,
+                                );
+                                return AddressWidget(
+                                  currentAddressIndex: address.count,
+                                  value: index,
+                                  addressID: snapshot.data!.docs[index].id,
+                                  totalAmount: tAmount.totalAmount,
+                                  addressModel: addressModel,
+                                );
+                              });
+                },
+              ),
+            );
+          }),
         ],
       ),
     );

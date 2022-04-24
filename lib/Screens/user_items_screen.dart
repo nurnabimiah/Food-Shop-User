@@ -15,9 +15,11 @@ import '../widgets/text_widget_header.dart';
 
 class UserItemsScreen extends StatefulWidget {
   final Menus? model;
-  const UserItemsScreen({
+  String? sellerUID;
+ UserItemsScreen({
     Key? key,
     this.model,
+    this.sellerUID,
   }) : super(key: key);
 
   @override
@@ -33,7 +35,7 @@ class _UserItemsScreenState extends State<UserItemsScreen> {
       body: CustomScrollView(
         slivers: [
           SliverPersistentHeader(
-           // pinned: true,
+            // pinned: true,
             delegate:
                 TextWidgetHeader(title: widget.model!.menuTitle! + "'s items"),
           ),
@@ -72,6 +74,7 @@ class _UserItemsScreenState extends State<UserItemsScreen> {
                           return ItemsWidget(
                             itemModel: itemModel,
                             context: context,
+                            sellerUID: widget.sellerUID
                             //netValue: model.isOnline,
                           );
                         },

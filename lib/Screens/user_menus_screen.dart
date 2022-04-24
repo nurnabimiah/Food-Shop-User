@@ -51,6 +51,7 @@ class _UserMenusScreenState extends State<UserMenusScreen> {
                 .orderBy("publishedDate", descending: true)
                 .snapshots(),
             builder: (context, AsyncSnapshot<QuerySnapshot?> snapshot) {
+              sellerUIDD = widget.sellerModel!.sellerUID;
               if (snapshot.hasError) {
                 ErrorDialog(
                   message: "${snapshot.error}",
@@ -76,6 +77,7 @@ class _UserMenusScreenState extends State<UserMenusScreen> {
                           return MenusWidget(
                             model: menuModel,
                             context: context,
+                            sellerUID: widget.sellerModel!.sellerUID,
                             //netValue: model.isOnline,
                           );
                         },
