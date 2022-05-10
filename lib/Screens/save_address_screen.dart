@@ -67,7 +67,7 @@ class _SaveAddressScreenState extends State<SaveAddressScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: SimpleAppbar(),
+      appBar: SimpleAppbar(title: "Foods",),
       floatingActionButton: SizedBox(
         height: MediaQuery.of(context).size.height * 0.05,
         width: MediaQuery.of(context).size.width * 0.30,
