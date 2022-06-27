@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:foodfair/exceptions/progress_bar.dart';
+import 'package:foodfair/widgets/progress_bar.dart';
 import 'package:foodfair/global/add_item_to_cart.dart';
 import 'package:foodfair/global/global_instance_or_variable.dart';
 import 'package:foodfair/widgets/my_order_wiget.dart';

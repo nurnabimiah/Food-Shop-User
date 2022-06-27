@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:foodfair/Screens/my_order_screen.dart';
-import 'package:foodfair/Screens/user_home_screen.dart';
+import 'package:foodfair/screens/my_order_screen.dart';
+import 'package:foodfair/screens/user_home_screen.dart';
 import 'package:foodfair/global/global_instance_or_variable.dart';
-import 'package:foodfair/presentation/color_manager.dart';
 
-import '../Screens/auth_screen.dart';
+import '../global/color_manager.dart';
+import '../screens/auth_screen.dart';
 
 class MyDrawer extends StatelessWidget {
   //const MyDrawer({Key? key}) : super(key: key);

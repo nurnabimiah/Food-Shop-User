@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:foodfair/models/items.dart';
 import 'package:foodfair/widgets/container_decoration.dart';
 
-import '../Screens/order_detail_screen.dart';
+import '../screens/order_detail_screen.dart';
 
 class MyOrderWidget extends StatelessWidget {
   final int? itemCount;
