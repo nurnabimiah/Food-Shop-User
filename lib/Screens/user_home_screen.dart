@@ -3,10 +3,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:foodfair/models/sellers_model.dart';
 import 'package:foodfair/providers/cart_item_quantity.dart';
+import 'package:foodfair/providers/seller.dart';
+import 'package:foodfair/providers/sellers_provider.dart';
 import 'package:foodfair/widgets/my_drawer.dart';
 import 'package:foodfair/widgets/seller_profile_design.dart';
 import 'package:provider/provider.dart';
 import '../exceptions/error_dialog.dart';
+import '../global/global_instance_or_variable.dart';
 import '../presentation/color_manager.dart';
 import '../providers/internet_connectivity.dart';
 import '../widgets/container_decoration.dart';
@@ -21,36 +24,8 @@ class UserHomeScreen extends StatefulWidget {
 }
 
 class _UserHomeScreenState extends State<UserHomeScreen> {
-  final sliderItems = [
-    "slider/0.jpg",
-    "slider/1.jpg",
-    "slider/2.jpg",
-    "slider/3.jpg",
-    "slider/4.jpg",
-    "slider/5.jpg",
-    "slider/6.jpg",
-    "slider/7.jpg",
-    "slider/8.jpg",
-    "slider/9.jpg",
-    "slider/10.jpg",
-    "slider/11.jpg",
-    "slider/12.jpg",
-    "slider/13.jpg",
-    "slider/14.jpg",
-    "slider/15.jpg",
-    "slider/16.jpg",
-    "slider/17.jpg",
-    "slider/18.jpg",
-    "slider/19.jpg",
-    "slider/20.jpg",
-    "slider/21.jpg",
-    "slider/22.jpg",
-    "slider/23.jpg",
-    "slider/24.jpg",
-    "slider/25.jpg",
-    "slider/26.jpg",
-    "slider/27.jpg",
-  ];
+  late SellersProvider _sellersProvider;
+  bool _init = true;
   var isLoading = true;
   TextEditingController searchController = TextEditingController();
 
@@ -60,30 +35,39 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   //   return query;
   // }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>>? query3;
-  Future<Stream<QuerySnapshot<Map<String, dynamic>>>>
-      getDataFromFirebase() async {
-    final query = FirebaseFirestore.instance.collection("sellers").snapshots();
-    return query;
-  }
-
-  @override
-  void initState() {
-    getDataFromFirebase().then((value) {
-      setState(() {
-        Provider.of<InternetConnectivityProvider>(context, listen: false)
-            .startMonitoring();
-        query3 = value;
-      });
-    });
-    super.initState();
-  }
-
-  //   @override
-  // void initState() {
-  //   super.initState();
-  //   Provider.of<ConnectivityProvider>(context, listen: false).startMonitoring();
+  // Stream<QuerySnapshot<Map<String, dynamic>>>? query3;
+  // Future<Stream<QuerySnapshot<Map<String, dynamic>>>>
+  //     getDataFromFirebase() async {
+  //   final query = FirebaseFirestore.instance.collection("sellers").snapshots();
+  //   return query;
   // }
+
+  // @override
+  // void initState() {
+  //   getDataFromFirebase().then((value) {
+  //     setState(() {
+  //       Provider.of<InternetConnectivityProvider>(context, listen: false)
+  //           .startMonitoring();
+  //       query3 = value;
+  //     });
+  //   });
+  //   super.initState();
+  // }
+
+
+ @override
+  void didChangeDependencies() {
+   if(_init){
+     _sellersProvider = Provider.of<SellersProvider>(context, listen: false);
+     _sellersProvider.fetchAllSellers().then((value) {
+       setState((){
+         Provider.of<InternetConnectivityProvider>(context, listen: false)
+             .startMonitoring();
+         _init = false;
+       });
+     });
+   }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -143,8 +127,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       drawer: MyDrawer(),
       body: Consumer<InternetConnectivityProvider>(
         builder: (consumerContext, model, child) {
-          print(
-              " 10   model.isOnline + ${model.isOnline} + FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFf ");
           if (model.isOnline != null) {
             return /*model.isOnline!
                 ? */
@@ -341,7 +323,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                 StreamBuilder(
                   // stream: getDataFromFirebase()!.snapshots(),
                   // stream: FirebaseFirestore.instance.collection("sellers").snapshots(),
-                  stream: query3,
+
+                  // stream: query3,
+                  stream: _sellersProvider.allSellersData,
                   builder: (context, AsyncSnapshot<QuerySnapshot?> snapshot) {
                     if (snapshot.hasError) {
                       ErrorDialog(
@@ -386,8 +370,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                         SliverList(
                             delegate: SliverChildBuilderDelegate(
                               (BuildContext context, int index) {
-                                print(
-                                    " 1 model.isOnline = ${model.isOnline} + JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ");
                                 Sellers sModel = Sellers.frmJson(
                                     snapshot.data!.docs[index].data()
                                         as Map<String, dynamic>);

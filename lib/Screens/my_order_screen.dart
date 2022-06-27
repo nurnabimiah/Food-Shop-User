@@ -53,7 +53,7 @@ class _MyOrderSceenState extends State<MyOrderSceen> {
                                 whereIn: separateItemIDFromOrdersCollection(
                                     /*snapshot.data.docs[index] == it gives only one order id.
                                      And inside of a specific order id we get productID list(name as productIDs)
-                                     productIDs = here we have itemID and item quantiy.so separateOrdersItemsIDs()
+                                     productIDs = here we have itemID and item quantiy.so separateItemIDFromOrdersCollection()
                                       by this fuction we will extract just itemID
                                      */
                                     (snapshot.data!.docs[index].data()!

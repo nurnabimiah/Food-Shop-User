@@ -7,6 +7,7 @@ import 'package:foodfair/providers/address.dart';
 import 'package:foodfair/providers/cart_item_quantity.dart';
 import 'package:foodfair/providers/order.dart';
 import 'package:foodfair/providers/seller.dart';
+import 'package:foodfair/providers/sellers_provider.dart';
 import 'package:foodfair/providers/total_amount.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Screens/user_home_screen.dart';
@@ -28,6 +29,7 @@ Future<void> main() async {
           create: (context) => InternetConnectivityProvider(),
           //child: const UserHomeScreen(),
         ),
+       ChangeNotifierProvider(create: (context) => SellersProvider()),
         ChangeNotifierProvider(
           create: (context) => CartItemQuanityProvider(),
         ),

@@ -11,7 +11,7 @@ class MapsUtils
 
     if(await canLaunch(googleMapUrl))
     {
-      await launch(googleMapUrl);
+      await launch(googleMapUrl); 
     }
     else
     {

@@ -183,7 +183,7 @@ class _CartScreenState extends State<CartScreen> {
                                 " 101 index = $index + value = ${separatedItemQuantityList![index]} + IIIIIIIIIIIIIIIIIIIIIIIIIII");
                           }
                           if (snapshot.data!.docs.length - 1 == index) {
-                            WidgetsBinding.instance!
+                            WidgetsBinding.instance
                                 .addPostFrameCallback((timeStamp) {
                               Provider.of<TotalAmountProvider>(context,
                                       listen: false)

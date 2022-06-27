@@ -44,10 +44,13 @@ class _SaveAddressScreenState extends State<SaveAddressScreen> {
     Position newPosition = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
 
+        
+
     position = newPosition;
 
     placemarks =
         await placemarkFromCoordinates(position!.latitude, position!.longitude);
+    //placemarks = await GeocodingPlatform.instance.placemarkFromCoordinates(position!.latitude, position!.longitude,localeIdentifier: "en");
 
     Placemark pMark = placemarks![0];
 
