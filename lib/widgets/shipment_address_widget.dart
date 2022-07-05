@@ -17,7 +17,7 @@ class ShipmentAddressWidget extends StatelessWidget {
           padding: EdgeInsets.all(10.0),
           child: Text('Shipping Details:',
               style:
-                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+              TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         ),
         const SizedBox(
           height: 6.0,
@@ -57,8 +57,8 @@ class ShipmentAddressWidget extends StatelessWidget {
               ),
               TableRow(
                 decoration: const BoxDecoration(
-                    //color: Colors.green,
-                    ),
+                  //color: Colors.green,
+                ),
                 children: [
                   const Padding(
                     padding: EdgeInsets.all(8.0),
@@ -102,7 +102,7 @@ class ShipmentAddressWidget extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               primary: Colors.purple[300],
               padding:
-                  const EdgeInsets.symmetric(horizontal: 100, vertical: 10),
+              const EdgeInsets.symmetric(horizontal: 100, vertical: 10),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
                 side: BorderSide(color: ColorManager.depOrange1),

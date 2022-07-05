@@ -388,7 +388,11 @@ packages:
     source: hosted
     version: "2.4.4"
   intl:
+<<<<<<< HEAD
     dependency: transitive
+=======
+    dependency: "direct main"
+>>>>>>> origin/day10
     description:
       name: intl
       url: "https://pub.dartlang.org"

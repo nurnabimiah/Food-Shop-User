@@ -29,7 +29,7 @@ Future<void> main() async {
           create: (context) => InternetConnectivityProvider(),
           //child: const UserHomeScreen(),
         ),
-       ChangeNotifierProvider(create: (context) => SellersProvider()),
+        ChangeNotifierProvider(create: (context) => SellersProvider()),
         // ChangeNotifierProvider(
         //   create: (context) => CartItemQuanityProvider(),
         // ),

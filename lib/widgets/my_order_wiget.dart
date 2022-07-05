@@ -14,12 +14,12 @@ class MyOrderWidget extends StatefulWidget {
   String? orderId;
   List<String>? itemQuantityList;
 
-   MyOrderWidget({
+  MyOrderWidget({
     Key? key,
     this.data,
-     this.itemCount,
-     this.orderId,
-     this.itemQuantityList,
+    this.itemCount,
+    this.orderId,
+    this.itemQuantityList,
   }) : super(key: key);
 
   @override
@@ -34,7 +34,7 @@ class _MyOrderWidgetState extends State<MyOrderWidget> {
   @override
   Widget build(BuildContext context){
     print("object1");
-   // print("items length = ${_orderProvider.itemModelList.length} of orderId = ${widget.orderModel!.orderId}");
+    // print("items length = ${_orderProvider.itemModelList.length} of orderId = ${widget.orderModel!.orderId}");
     print("");
     return InkWell(
       onTap: (){
@@ -49,7 +49,7 @@ class _MyOrderWidgetState extends State<MyOrderWidget> {
             borderRadius: BorderRadius.circular(5)),
         height: widget.itemCount!  * 125,
         child:  ListView.builder(
-             itemCount: widget.itemCount,
+            itemCount: widget.itemCount,
             physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index){
               ItemModel itemModel = ItemModel.fromJson(widget.data![index].data()! as Map<String, dynamic>);
@@ -66,7 +66,7 @@ class _MyOrderWidgetState extends State<MyOrderWidget> {
 
 Widget PlacedOrderDesignWidtet(
     ItemModel itemModel, BuildContext context, separateItemsQuantityList) {
- // print("6 + separateItemsQuantityList = + ${separateItemsQuantityList} + XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxxxxxxxx");
+  // print("6 + separateItemsQuantityList = + ${separateItemsQuantityList} + XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxxxxxxxx");
   return Container(
     width: MediaQuery.of(context).size.width,
     height: 120,

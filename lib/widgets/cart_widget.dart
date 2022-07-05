@@ -31,14 +31,14 @@ class _CartWidgetState extends State<CartWidget> {
 
           borderOnForeground: false,
           shape: const RoundedRectangleBorder(
-              // side: BorderSide(
-              //   color: Colors.white,
-              //   width: 2,
-              // ),
-              // borderRadius: BorderRadius.all(
-              //   Radius.circular(10),
-              // ),
-              ),
+            // side: BorderSide(
+            //   color: Colors.white,
+            //   width: 2,
+            // ),
+            // borderRadius: BorderRadius.all(
+            //   Radius.circular(10),
+            // ),
+          ),
           elevation: 10,
           child: Row(
             //mainAxisSize: MainAxisSize.min,
@@ -71,7 +71,7 @@ class _CartWidgetState extends State<CartWidget> {
                     children: [
                       Padding(
                         padding:
-                            const EdgeInsets.only(top: 8, left: 3, bottom: 5),
+                        const EdgeInsets.only(top: 8, left: 3, bottom: 5),
                         child: Text(
                           widget.cartModel!.itemTitle!,
                           style: TextStyle(fontSize: 16, color: Colors.black),
@@ -89,12 +89,12 @@ class _CartWidgetState extends State<CartWidget> {
                             const Text(
                               "Price: ",
                               style:
-                                  TextStyle(fontSize: 16, color: Colors.black),
+                              TextStyle(fontSize: 16, color: Colors.black),
                             ),
                             Text(
                               widget.cartModel!.price.toString(),
                               style:
-                                  TextStyle(fontSize: 16, color: Colors.black),
+                              TextStyle(fontSize: 16, color: Colors.black),
                             ),
                           ],
                         ),
@@ -106,12 +106,12 @@ class _CartWidgetState extends State<CartWidget> {
                             const Text(
                               "Total: ",
                               style:
-                                  TextStyle(fontSize: 16, color: Colors.black),
+                              TextStyle(fontSize: 16, color: Colors.black),
                             ),
                             Text(
                               "${widget.cartModel!.price! * widget.quantity!}",
                               style:
-                                  TextStyle(fontSize: 16, color: Colors.black),
+                              TextStyle(fontSize: 16, color: Colors.black),
                             ),
                           ],
                         ),

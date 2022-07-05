@@ -12,13 +12,13 @@ class DbHelper {
 
   //fetch all sellers
   static Future<Stream<QuerySnapshot<Map<String, dynamic>>>>?
-      fetchAllSellers() async {
+  fetchAllSellers() async {
     Stream<QuerySnapshot<Map<String, dynamic>>>? queryData;
     try {
       queryData = _db
           .collection(
-            "sellers",
-          )
+        "sellers",
+      )
           .snapshots();
       return queryData;
     } catch (error) {
@@ -28,7 +28,7 @@ class DbHelper {
 
   //fetch a specific seller menu with once's id
   static Future<Stream<QuerySnapshot<Map<String, dynamic>>>>
-      fetchSpecificSellerMenus(String sellerID) async {
+  fetchSpecificSellerMenus(String sellerID) async {
     Stream<QuerySnapshot<Map<String, dynamic>>>? queryData;
     try {
       queryData = _db
@@ -45,7 +45,7 @@ class DbHelper {
 
   // fetch a specific seller items with id
   static Future<Stream<QuerySnapshot<Map<String, dynamic>>>>
-      fetchSpecificSellerItems(String sellerID, String menuID) async {
+  fetchSpecificSellerItems(String sellerID, String menuID) async {
     Stream<QuerySnapshot<Map<String, dynamic>>>? queryData;
     try {
       queryData = _db
@@ -104,7 +104,7 @@ class DbHelper {
     final wb = _db.batch();
     for(var cartModel in cartModelList){
       final cartDocumentId = _db.collection("users").doc(userId).collection("cart").
-                              doc(cartModel.itemID);
+      doc(cartModel.itemID);
       //all product id wll assign into wb.delete collection then we will commit
       wb.delete(cartDocumentId);
     }
@@ -135,7 +135,7 @@ class DbHelper {
 
   //fetch specific user's orders
   static Future<Stream<QuerySnapshot<Map<String, dynamic>>>>?
-      fetchOrders() async {
+  fetchOrders() async {
     Stream<QuerySnapshot<Map<String, dynamic>>>? queryData;
     try {
       //here we get the order list of order collection which are normal
@@ -154,30 +154,30 @@ class DbHelper {
 
 
 
-  // //fetch items those are ordered from a specific user
-  // static Future<QuerySnapshot<Map<String, dynamic>>> fetchOrderedItems(OrderModel orderModel) async {
-  //   QuerySnapshot<Map<String, dynamic>> queryData;
-  //   List<String> itemList = separatedItemIDFromOrdersCollection(orderModel.productIDs);
-  //   for(int i=0; i<itemList.length; i++){
-  //     print("itemId in db = ${itemList[i]}");
-  //   }
-  //   print('');
-  //   try {
-  //     queryData = await _db
-  //         .collection(
-  //             "items") /*insdie of items colleciton we will search which items are ordered.*/
-  //         .where("itemID",
-  //             /*if itemID is exist in separateOrdersItemsIDs*/
-  //             whereIn: itemList).
-  //         get();
-  //     print('dfd');
-  //         for(int i = 0; i< queryData.docs.length; i++){
-  //           print("after itemId = ${queryData.docs[i].id}");
-  //         }
-  //         print('');
-  //     return queryData;
-  //   } catch (error) {
-  //     throw "error";
-  //   }
-  // }
+// //fetch items those are ordered from a specific user
+// static Future<QuerySnapshot<Map<String, dynamic>>> fetchOrderedItems(OrderModel orderModel) async {
+//   QuerySnapshot<Map<String, dynamic>> queryData;
+//   List<String> itemList = separatedItemIDFromOrdersCollection(orderModel.productIDs);
+//   for(int i=0; i<itemList.length; i++){
+//     print("itemId in db = ${itemList[i]}");
+//   }
+//   print('');
+//   try {
+//     queryData = await _db
+//         .collection(
+//             "items") /*insdie of items colleciton we will search which items are ordered.*/
+//         .where("itemID",
+//             /*if itemID is exist in separateOrdersItemsIDs*/
+//             whereIn: itemList).
+//         get();
+//     print('dfd');
+//         for(int i = 0; i< queryData.docs.length; i++){
+//           print("after itemId = ${queryData.docs[i].id}");
+//         }
+//         print('');
+//     return queryData;
+//   } catch (error) {
+//     throw "error";
+//   }
+// }
 }

@@ -14,8 +14,8 @@ class InternetConnectivityProvider with ChangeNotifier {
   startMonitoring() async {
     await initConnectivity();
     _connectivity.onConnectivityChanged.listen((
-      ConnectivityResult result,
-    ) async {
+        ConnectivityResult result,
+        ) async {
       if (result == ConnectivityResult.none) {
 
         _isOnline = false;
@@ -52,7 +52,7 @@ class InternetConnectivityProvider with ChangeNotifier {
     bool? isConnected;
     try {
       final List<InternetAddress> result =
-          await InternetAddress.lookup('google.com');
+      await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         isConnected = true;
 

@@ -28,7 +28,7 @@ class AddressWidget extends StatefulWidget {
 class _AddressWidgetState extends State<AddressWidget> {
   @override
   Widget build(BuildContext context) {
-   // final provider = Provider.of<SellerProvider>(context);
+    // final provider = Provider.of<SellerProvider>(context);
     return InkWell(
       onTap: () {
         //select this address
@@ -141,7 +141,7 @@ class _AddressWidgetState extends State<AddressWidget> {
               style: ElevatedButton.styleFrom(
                 primary: Colors.purple[300],
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                   side: BorderSide(color: ColorManager.depOrange1),
@@ -150,31 +150,31 @@ class _AddressWidgetState extends State<AddressWidget> {
             ),
             widget.value == Provider.of<AddressProvider>(context).count
                 ? ElevatedButton(
-                    onPressed: () {
-                      //Navigator.pushNamed(context, PlacedOrderScreen.path, arguments: widget.addressID);
-                      // String? sellerUid =  Provider.of<SellerProvider>(context, listen: false)
-                      //   .sellerUID;
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => PlacedOrderScreen(
-                                    addressID: widget.addressID,
-                                    tAmount: widget.totalAmount,
-                                  )));
-                    },
-                    child: const Text(
-                      "Proceed",
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.purple[300],
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 43, vertical: 10),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        side: BorderSide(color: ColorManager.depOrange1),
-                      ),
-                    ),
-                  )
+              onPressed: () {
+                //Navigator.pushNamed(context, PlacedOrderScreen.path, arguments: widget.addressID);
+                // String? sellerUid =  Provider.of<SellerProvider>(context, listen: false)
+                //   .sellerUID;
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PlacedOrderScreen(
+                          addressID: widget.addressID,
+                          tAmount: widget.totalAmount,
+                        )));
+              },
+              child: const Text(
+                "Proceed",
+              ),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.purple[300],
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 43, vertical: 10),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  side: BorderSide(color: ColorManager.depOrange1),
+                ),
+              ),
+            )
                 : Text(""),
           ],
         ),

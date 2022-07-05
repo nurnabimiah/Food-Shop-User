@@ -17,7 +17,7 @@ class ItemsWidget extends StatefulWidget {
     this.netValue,
     this.sellerUID,
   }) : super(key: key);
-     
+
 
   @override
   State<ItemsWidget> createState() => _ItemsWidgetState();
@@ -56,17 +56,17 @@ class _ItemsWidgetState extends State<ItemsWidget> {
               borderRadius: BorderRadius.circular(8.0),
               child: widget.itemModel!.itemImageUrl == null
                   ? Container(
-                      color: ColorManager.purple1,
-                      height: MediaQuery.of(context).size.height * 0.3,
-                      width: MediaQuery.of(context).size.width,
-                      child: const Center(
-                          child: Text(
+                  color: ColorManager.purple1,
+                  height: MediaQuery.of(context).size.height * 0.3,
+                  width: MediaQuery.of(context).size.width,
+                  child: const Center(
+                      child: Text(
                         "Image not found", /*style: TextStyle(height: ),*/
                       )))
                   : /*widget.netValue == false
                           ? LoadingContainer()
                           : */
-                  /*Image.network(
+              /*Image.network(
                       widget.itemModel!.itemImageUrl!,
                       height: MediaQuery.of(context).size.height * 0.3,
                       width: MediaQuery.of(context).size.width,
@@ -85,15 +85,15 @@ class _ItemsWidgetState extends State<ItemsWidget> {
                       },
                     ),*/
 
-                  CachedNetworkImage(
-                      imageUrl: widget.itemModel!.itemImageUrl!,
-                      placeholder: (context, url) =>
-                          Center(child: LoadingContainer()),
-                      errorWidget: (context, url, error) => Icon(Icons.error),
-                      height: MediaQuery.of(context).size.height * 0.3,
-                      width: MediaQuery.of(context).size.width,
-                      fit: BoxFit.fill,
-                    ),
+              CachedNetworkImage(
+                imageUrl: widget.itemModel!.itemImageUrl!,
+                placeholder: (context, url) =>
+                    Center(child: LoadingContainer()),
+                errorWidget: (context, url, error) => Icon(Icons.error),
+                height: MediaQuery.of(context).size.height * 0.3,
+                width: MediaQuery.of(context).size.width,
+                fit: BoxFit.fill,
+              ),
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 20),

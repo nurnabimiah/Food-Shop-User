@@ -17,7 +17,7 @@ class MenusWidget extends StatefulWidget {
     this.sellerUID,
     this.netValue,
   }) : super(key: key);
-      
+
 
   @override
   State<MenusWidget> createState() => _MenusWidgetState();
@@ -46,17 +46,17 @@ class _MenusWidgetState extends State<MenusWidget> {
               borderRadius: BorderRadius.circular(8.0),
               child: widget.model!.menuImageUrl == null
                   ? Container(
-                      color: ColorManager.purple1,
-                      height: MediaQuery.of(context).size.height * 0.3,
-                      width: MediaQuery.of(context).size.width,
-                      child: const Center(
-                          child: Text(
+                  color: ColorManager.purple1,
+                  height: MediaQuery.of(context).size.height * 0.3,
+                  width: MediaQuery.of(context).size.width,
+                  child: const Center(
+                      child: Text(
                         "Image not found", /*style: TextStyle(height: ),*/
                       )))
                   : /*widget.netValue == false
                           ? LoadingContainer()
                           : */
-                  /* Image.network(
+              /* Image.network(
                       widget.model!.menuImageUrl!,
                       height: MediaQuery.of(context).size.height * 0.3,
                       width: MediaQuery.of(context).size.width,
@@ -75,15 +75,15 @@ class _MenusWidgetState extends State<MenusWidget> {
                       },
                     ),*/
 
-                  CachedNetworkImage(
-                      imageUrl: widget.model!.menuImageUrl!,
-                      placeholder: (context, url) =>
-                          Center(child: LoadingContainer()),
-                      errorWidget: (context, url, error) => Icon(Icons.error),
-                      height: MediaQuery.of(context).size.height * 0.3,
-                      width: MediaQuery.of(context).size.width,
-                      fit: BoxFit.fill,
-                    ),
+              CachedNetworkImage(
+                imageUrl: widget.model!.menuImageUrl!,
+                placeholder: (context, url) =>
+                    Center(child: LoadingContainer()),
+                errorWidget: (context, url, error) => Icon(Icons.error),
+                height: MediaQuery.of(context).size.height * 0.3,
+                width: MediaQuery.of(context).size.width,
+                fit: BoxFit.fill,
+              ),
             ),
             Text(
               "${widget.model!.menuTitle}",
