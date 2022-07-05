@@ -27,6 +27,7 @@ class _AddressScreenState extends State<AddressScreen> {
         width: MediaQuery.of(context).size.width * 0.50,
         child: FloatingActionButton.extended(
           onPressed: () {
+            print("I am in address screen");
             Navigator.of(context).pushNamed(SaveAddressScreen.path);
           },
           label: const Text("Add new address"),
