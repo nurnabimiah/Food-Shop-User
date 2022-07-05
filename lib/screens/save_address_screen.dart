@@ -18,23 +18,15 @@ class SaveAddressScreen extends StatefulWidget {
 
 class _SaveAddressScreenState extends State<SaveAddressScreen> {
   final _name = TextEditingController();
-
   final _phoneNumber = TextEditingController();
-
   final _flatNumber = TextEditingController();
-
   final _city = TextEditingController();
-
   final _state = TextEditingController();
-
   final _completeAddress = TextEditingController();
-
   final _locationController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
-
   List<Placemark>? placemarks;
-
   Position? position;
 
   getUserLocationAddress() async {
@@ -43,8 +35,6 @@ class _SaveAddressScreenState extends State<SaveAddressScreen> {
 
     Position newPosition = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-
-        
 
     position = newPosition;
 

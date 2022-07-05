@@ -30,10 +30,10 @@ class OrderProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  //fetch items those are ordered from a specific user
+  // //fetch items those are ordered from a specific user
   // Future<QuerySnapshot<Map<String, dynamic>>> fetchOrderedItems(
   //     OrderModel orderModel)async {
-  //   return  DbHelper.fetchOrderedItems(orderModel);
+  //   //return  DbHelper.fetchOrderedItems(orderModel);
   // }
 
 }

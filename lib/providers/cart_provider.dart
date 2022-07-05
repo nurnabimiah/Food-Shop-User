@@ -120,4 +120,9 @@ class CartProvider with ChangeNotifier {
       previousSellerId = '';
     });
   }
+
+  //this is for testing
+ void tesing(){
+    print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+ }
 }
