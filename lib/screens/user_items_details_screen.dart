@@ -135,12 +135,13 @@ class _UserItemsDetailsScreenState extends State<UserItemsDetailsScreen> {
                       //previous selleId is set with sellerId while fetching cartItems in cartProvider
                       if (previousSellerId == '' ||
                           previousSellerId == currentSellerId) {
-                        previousSellerId = widget.itemModel!.sellerUID!;
-                        _cartProvider.isAlreadyIncart(widget.itemModel!.itemID!)
-                            ?
-                        _cartProvider.removeFromCart(widget.itemModel!.itemID!)
-                            :
-                        _cartProvider.addToCart(widget.itemModel!, itemCounter);
+                        // previousSellerId = widget.itemModel!.sellerUID!;
+                        // _cartProvider.isAlreadyIncart(widget.itemModel!.itemID!)
+                        //     ?
+                        // _cartProvider.removeFromCart(widget.itemModel!.itemID!)
+                        //     :
+                        // _cartProvider.addToCart(widget.itemModel!, itemCounter);
+                        print("dfjdlfkjsdalfjasdlfkjasd");
                       }
                       else {
                         //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("order at first")));
