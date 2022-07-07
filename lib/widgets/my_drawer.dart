@@ -119,11 +119,20 @@ class MyDrawer extends StatelessWidget {
               style: TextStyle(color: Colors.black),
             ),
             onTap: () {
-              firebaseAuth.signOut().then((value) {
+              firebaseAuth.signOut().then((value) async{
+                //sPref!.setString("uid", '');
+                await sPref!.setString("photoUrl", '');
+                await sPref!.setString("name", '');
+                await  sPref!.setString("email", '');
+
+                // await sPref!.setString("uid", currentUser.uid);
+                // await sPref!.setString("email", currentUser.email.toString());
+                // await sPref!.setString("name", nameController.text.trim());
+                // await sPref!.setString("photoUrl", userImageUrl!);
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const AuthScreen()));
+                        builder: (context) => AuthScreen()));
               });
             },
           ),

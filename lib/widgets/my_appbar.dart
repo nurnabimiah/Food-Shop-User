@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:foodfair/providers/cart_item_quantity.dart';
 import 'package:foodfair/providers/cart_provider.dart';
 import 'package:provider/provider.dart';
 

@@ -1,26 +1,21 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:foodfair/widgets/progress_bar.dart';
-import 'package:foodfair/models/items_model.dart';
-import 'package:foodfair/providers/total_amount.dart';
+import 'package:foodfair/providers/item_counter_provider.dart';
 import 'package:foodfair/widgets/cart_widget.dart';
 import 'package:foodfair/widgets/text_widget_header.dart';
 import 'package:provider/provider.dart';
-import '../global/add_item_to_cart.dart';
 import '../global/color_manager.dart';
-import '../providers/cart_item_quantity.dart';
 import '../providers/cart_provider.dart';
 import '../widgets/container_decoration.dart';
 import 'address_screen.dart';
 
 class CartScreen extends StatefulWidget {
-
   @override
   State<CartScreen> createState() => _CartScreenState();
 }
 
 class _CartScreenState extends State<CartScreen> {
   late CartProvider _cartProvider;
+  late ItemCounterProvider _itemCounterProvider;
   double _totalAmount = 0;
   bool _init = true;
 
@@ -29,78 +24,94 @@ class _CartScreenState extends State<CartScreen> {
   @override
   void didChangeDependencies() {
     _cartProvider = Provider.of<CartProvider>(context);
+    _itemCounterProvider = Provider.of<ItemCounterProvider>(context);
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("foods"),
-        centerTitle: true,
-        //automaticallyImplyLeading: false,
-        flexibleSpace: Container(
-          decoration: const ContainerDecoration().decoaration(),
-        ),
-        actions: [
-          Stack(
-            children: [
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.shopping_cart),
-              ),
-              Positioned(
-                top: 3,
-                right: 10,
-                child: Text(
-                      _cartProvider.cartModelList.length.toString(),
-                      style: TextStyle(color: Colors.white, fontSize: 13),
-                    ),
-              )
-            ],
+        appBar: AppBar(
+          leading: IconButton(onPressed: (
+
+          ){},
+            icon: Icon(Icons.arrow_back),),
+          title: const Text("foods"),
+          centerTitle: true,
+          //automaticallyImplyLeading: false,
+          flexibleSpace: Container(
+            decoration: const ContainerDecoration().decoaration(),
           ),
-        ],
-      ),
-      floatingActionButton: _cartProvider.cartModelList.isEmpty ? null : floatingActionButtonMethod(),
-      body: _cartProvider.cartModelList.isEmpty ? Center(child: Text("Not yet added in cart", style: TextStyle(fontSize: 24, color: Colors.redAccent, fontWeight: FontWeight.bold),),) : customScrollViewMetho()
-    );
+          actions: [
+            Stack(
+              children: [
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.shopping_cart),
+                ),
+                Positioned(
+                  top: 3,
+                  right: 10,
+                  child: Text(
+                    _cartProvider.cartModelList.length.toString(),
+                    style: TextStyle(color: Colors.white, fontSize: 13),
+                  ),
+                )
+              ],
+            ),
+          ],
+        ),
+        floatingActionButton: _cartProvider.cartModelList.isEmpty
+            ? null
+            : floatingActionButtonMethod(),
+        body: _cartProvider.cartModelList.isEmpty
+            ? Center(
+                child: Text(
+                  "Not yet added in cart",
+                  style: TextStyle(
+                      fontSize: 24,
+                      color: Colors.redAccent,
+                      fontWeight: FontWeight.bold),
+                ),
+              )
+            : customScrollViewMetho());
   }
 
   customScrollViewMetho() {
     return CustomScrollView(
       slivers: [
         SliverPersistentHeader(
-              pinned: true,
-              delegate: _cartProvider.totalItemsInCart == 0
-                  ? TextWidgetHeader(title: "Total price = Tk 0")
-                  : TextWidgetHeader(
+          pinned: true,
+          delegate: _cartProvider.totalItemsInCart == 0
+              ? TextWidgetHeader(title: "Total price = Tk 0")
+              : TextWidgetHeader(
                   title:
-                  "Total price = Tk ${_cartProvider.cartItemsTotalPrice}"),
-            ),
+                      "Total price = Tk ${_cartProvider.cartItemsTotalPrice}"),
+        ),
         SliverList(
-              delegate: SliverChildBuilderDelegate(
-                    (context, index) {
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              if (index == 0) {
+                _totalAmount = 0;
+                _totalAmount = _totalAmount +
+                    (_cartProvider.cartModelList[index].price! *
+                        _cartProvider.cartModelList[index].quantity);
+              } else {
+                _totalAmount = _totalAmount +
+                    (_cartProvider.cartModelList[index].price! *
+                        _cartProvider.cartModelList[index].quantity);
+              }
 
-                  if (index == 0) {
-                    _totalAmount = 0;
-                    _totalAmount = _totalAmount +
-                        (_cartProvider.cartModelList[index].price! *
-                            _cartProvider.cartModelList[index].quantity);
-                   } else {
-                    _totalAmount = _totalAmount +
-                        (_cartProvider.cartModelList[index].price! *
-                            _cartProvider.cartModelList[index].quantity);
-                  }
-                 
-                  return CartWidget(
-                    cartModel: _cartProvider.cartModelList[index],
-                    quantity: _cartProvider.cartModelList[index].quantity,
-                    total: _totalAmount,
-                  );
-                },
-                childCount: _cartProvider.cartModelList.length, /* ? snapshot.data!.docs.length : 0*/
-              ),
-            ),
+              return CartWidget(
+                cartModel: _cartProvider.cartModelList[index],
+                quantity: _cartProvider.cartModelList[index].quantity,
+                total: _totalAmount,
+              );
+            },
+            childCount: _cartProvider
+                .cartModelList.length, /* ? snapshot.data!.docs.length : 0*/
+          ),
+        ),
       ],
     );
   }
@@ -119,6 +130,7 @@ class _CartScreenState extends State<CartScreen> {
                 heroTag: "btn1",
                 onPressed: () {
                   _cartProvider.clearCart();
+                  _itemCounterProvider.setItemCounterOne();
                 },
                 label: const Text(
                   "Clear cart",
@@ -132,7 +144,9 @@ class _CartScreenState extends State<CartScreen> {
             ),
           ),
         ),
-        SizedBox(width: 10,),
+        SizedBox(
+          width: 10,
+        ),
         Align(
           alignment: Alignment.bottomLeft,
           child: SizedBox(

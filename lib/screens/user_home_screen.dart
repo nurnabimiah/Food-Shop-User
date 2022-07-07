@@ -1,13 +1,15 @@
+import 'dart:convert';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:foodfair/models/sellers_model.dart';
-import 'package:foodfair/providers/cart_item_quantity.dart';
 import 'package:foodfair/providers/cart_provider.dart';
 import 'package:foodfair/providers/sellers_provider.dart';
 import 'package:foodfair/widgets/my_drawer.dart';
 import 'package:foodfair/widgets/seller_profile_design.dart';
 import 'package:provider/provider.dart';
+import '../models/cart_model.dart';
 import '../widgets/error_dialog.dart';
 import '../global/color_manager.dart';
 import '../global/global_instance_or_variable.dart';
@@ -32,28 +34,43 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
 
  @override
   void didChangeDependencies() {
+   //print("1 isLoading = $isLoading");
    if(_init){
      _sellersProvider = Provider.of<SellersProvider>(context, listen: false);
      _cartProvider = Provider.of<CartProvider>(context, listen: false);
      _sellersProvider.fetchAllSellers().then((value) {
        _cartProvider.fetchCartItemsForSpecificUser();
-       setState((){
-         Provider.of<InternetConnectivityProvider>(context, listen: false)
-             .startMonitoring();
-         _init = false;
+       Provider.of<InternetConnectivityProvider>(context, listen: false)
+           .startMonitoring().then((value){
+         setState((){
+           isLoading = false;
+           //print("isLoading = $isLoading");
+         });
        });
      });
    }
+   _init = false;
   }
 
   @override
   Widget build(BuildContext context) {
+    print('');
+   print("i am in home");
+    for(var cartList in sPref!.getStringList("cartModelStringList")!){
+      //print("2 i am in home");
+      Map<String, dynamic> jsonDecodeData = jsonDecode(cartList);
+      final _carModel = CartModel.fromMap(jsonDecodeData);
+      //_cartModelList.add(_carModel);
+      print("_cartModel in home = ${_carModel.toMap()}");
+    }
+    print('');
+   print('');
+   print('');
     return Scaffold(
+      backgroundColor: ColorManager.lightPink,
       drawer: MyDrawer(),
-      body: Consumer<InternetConnectivityProvider>(
-        builder: (consumerContext, model, child) {
-          if (model.isOnline != null) {
-            return CustomScrollView(
+      body: isLoading ? Center(child: CircularProgressIndicator(),) :
+        CustomScrollView(
               slivers: [
                 SliverAppBar(
                   actions: [
@@ -104,7 +121,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                                 return SellerProfileDesign(
                                   sellerModel: sModel,
                                   context: context,
-                                  netValue: model.isOnline,
                                 );
                               },
                               childCount: snapshot.data!.docs.length,
@@ -113,13 +129,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                   },
                 ),
               ],
-            );
-          }
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
-      ),
+            ),
+
     );
   }
 

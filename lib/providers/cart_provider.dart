@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:foodfair/models/items_model.dart';
 import '../db/db_helper.dart';
@@ -19,23 +21,67 @@ class CartProvider with ChangeNotifier {
       sellerId: itemModel.sellerUID,
       quantity: quantity,
     );
-    await DbHelper.addToCart(sPref!.getString("uid")!, cartModel);
+
+    //if user is logged in then it will add in firebase else in local
+    if(firebaseAuth.currentUser != null){
+      await DbHelper.addToCart(sPref!.getString("uid")!, cartModel);
+    }else{
+      final map =  cartModel.toMap();
+      sPref!.setString("cartModelString", jsonEncode(map));
+      //final getCartModelString = sPref!.getString("cartModelString");
+      //print("getCartModelString = ${sPref!.getString("cartModelString")}");
+      //Map<String, dynamic> jsonDecodeData = jsonDecode(getCartModelString!);
+
+
+      // List<String> _cartList  = [];
+      // _cartList.add(sPref!.getString("cartModelString")!);
+
+
+       sPref!.setStringList("cartModelStringList", [sPref!.getString("cartModelString")!]);
+      //sPref!.setStringList("cartModelStringList", _cartList.map((value) => value.toString()).toList());
+
+      //List<String>? getCartModelStringList = sPref!.getStringList("cartModelStringList");
+
+      for(var cartList in sPref!.getStringList("cartModelStringList")!){
+        Map<String, dynamic> jsonDecodeData = jsonDecode(cartList);
+        final _carModel = CartModel.fromMap(jsonDecodeData);
+        _cartModelList.add(_carModel);
+        //print("_cartModel = ${_carModel.toMap()}");
+      }
+      for(int i=0; i<_cartModelList.length; i++){
+        print("data ${[i]} = ${_cartModelList[i].toMap()}");
+      }
+      // List<String> jsonDecodeData = (jsonDecode(sPref!.getStringList("cartModelStringList")!) as List<dynamic>).cast<String>() ;
+      // List<String> stringList = (jsonDecode(input) as List<dynamic>).cast<String>();
+
+      // _cartModelList = CartModel.fromMap(jsonDecodeData);
+    }
   }
 
   //fetch cart
   fetchCartItemsForSpecificUser() async {
-    DbHelper.fetchCartItemsForSpecificUser(sPref!.getString("uid")!)!
-        .listen((snapshot) {
-      _cartModelList = List.generate(snapshot.docs.length,
-          (index) => CartModel.fromMap(snapshot.docs[index].data()));
-      //if at least one have one item in cart that's mean user have cart's item to order from
-      // a specific restaurant(sellerId).
-      //so user could not add to cart with multiple sellerId.
-      if (_cartModelList.isNotEmpty) {
-        previousSellerId = _cartModelList[0].sellerId!;
+    if(firebaseAuth.currentUser != null){
+      DbHelper.fetchCartItemsForSpecificUser(sPref!.getString("uid")!)!
+          .listen((snapshot) {
+        _cartModelList = List.generate(snapshot.docs.length,
+                (index) => CartModel.fromMap(snapshot.docs[index].data()));
+        //if at least one have one item in cart that's mean user have cart's item to order from
+        // a specific restaurant(sellerId).
+        //so user could not add to cart with multiple sellerId.
+        if (_cartModelList.isNotEmpty) {
+          previousSellerId = _cartModelList[0].sellerId!;
+        }
+        notifyListeners();
+      });
+    }
+    else{
+      for(var cartList in sPref!.getStringList("cartModelStringList")!){
+        Map<String, dynamic> jsonDecodeData = jsonDecode(cartList);
+        final _carModel = CartModel.fromMap(jsonDecodeData);
+        _cartModelList.add(_carModel);
+        print("_cartModel in fetch = ${_carModel.toMap()}");
       }
-      notifyListeners();
-    });
+    }
   }
 
   //total length of cart
@@ -63,7 +109,7 @@ class CartProvider with ChangeNotifier {
   }
 
   //remove from cart an item
-  Future<void> removeFromCart(String itemId) async {
+   Future<void> removeFromCart(String itemId) async {
     DbHelper.removeFromCart(itemId, sPref!.getString("uid")!).then((value) {
       if (_cartModelList.isEmpty) {
         previousSellerId = '';

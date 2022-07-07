@@ -38,7 +38,7 @@ dependencies:
   firebase_auth:
   cloud_firestore:
   firebase_storage:
-  
+
   image_picker:
   geolocator:
   geocoding:
@@ -46,26 +46,16 @@ dependencies:
   shared_preferences:
 
   carousel_slider:
-<<<<<<< HEAD
-  flutter_staggered_grid_view:
-=======
   flutter_staggered_grid_view: ^0.4.1
->>>>>>> origin/day10
 
   connectivity: ^3.0.6
   provider:
   http:
-<<<<<<< HEAD
-  number_inc_dec:
-  url_launcher:
-  cached_network_image:
-=======
   number_inc_dec: ^0.8.0
   url_launcher:
   cached_network_image: ^3.2.0
   intl:
->>>>>>> origin/day10
-
+  connectivity_plus:
 
 
 

@@ -14,14 +14,15 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   startTimer() {
     Timer(const Duration(seconds: 1), () async {
-      //in if now current user is registered and it is save lacallly with sharedPreferences
-      if (firebaseAuth.currentUser != null) {
+      //in if now current user is registered and it is saved locally with sharedPreferences
+      // if (firebaseAuth.currentUser != null) {
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => const UserHomeScreen()));
-      } else {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const AuthScreen()));
-      }
+      // }
+      //else {
+      //   Navigator.push(context,
+      //       MaterialPageRoute(builder: (context) => const AuthScreen()));
+     // }
       // Navigator.push(
       //   context, MaterialPageRoute(builder: (context) => const AuthScreen()));
     });

@@ -11,7 +11,7 @@ class InternetConnectivityProvider with ChangeNotifier {
   bool? _isOnline;
   bool? get isOnline => _isOnline;
 
-  startMonitoring() async {
+  Future<void> startMonitoring() async {
     await initConnectivity();
     _connectivity.onConnectivityChanged.listen((
         ConnectivityResult result,

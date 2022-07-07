@@ -1,16 +1,27 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:foodfair/models/items_model.dart';
+import 'package:foodfair/screens/cart_screen.dart';
+import 'package:foodfair/screens/user_items_details_screen.dart';
+import 'package:foodfair/screens/user_items_screen.dart';
+import 'package:foodfair/widgets/add_and_remove_into_cart_widget.dart';
+import 'package:provider/provider.dart';
 import '../../widgets/error_dialog.dart';
 import '../../widgets/loading_dialog.dart';
 import '../../global/global_instance_or_variable.dart';
 import '../../widgets/container_decoration.dart';
 import '../global/color_manager.dart';
+import '../providers/cart_provider.dart';
+import '../providers/item_counter_provider.dart';
 import 'registration_screen.dart';
 import 'user_home_screen.dart';
 
 class AuthScreen extends StatefulWidget {
-  const AuthScreen({Key? key}) : super(key: key);
+  ItemModel? itemModel;
+  double? buttonSize;
+
+  AuthScreen({this.itemModel, this.buttonSize});
 
   @override
   State<AuthScreen> createState() => _AuthScreenState();
@@ -20,6 +31,17 @@ class _AuthScreenState extends State<AuthScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController? emailController = TextEditingController();
   TextEditingController? passwordController = TextEditingController();
+
+
+  late CartProvider _cartProvider;
+  late ItemCounterProvider _itemCounterProvider;
+
+  @override
+  void didChangeDependencies() {
+    _cartProvider = Provider.of<CartProvider>(context);
+    _itemCounterProvider = Provider.of<ItemCounterProvider>(context);
+    super.didChangeDependencies();
+  }
 
   _formValidation() {
     final isValid = _formKey.currentState!.validate();
@@ -86,9 +108,18 @@ class _AuthScreenState extends State<AuthScreen> {
         // List<String> userCartList = snapShot.data()!["userCart"].cast<String>();
         // await sPref!.setStringList("userCart", userCartList);
 
-        Navigator.pop(context);
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const UserHomeScreen()));
+        // Navigator.pop(context);
+        // if(widget.buttonSize == 40){
+        //   _cartProvider.addToCart(
+        //       widget.itemModel!, _itemCounterProvider.itemCounter);
+        //   Navigator.push(context,
+        //       MaterialPageRoute(builder: (context) => CartScreen()));
+        // }
+        // else{
+        //   Navigator.push(context,
+        //       MaterialPageRoute(builder: (context) => UserHomeScreen()));
+        // }
+
       } else {
         firebaseAuth.signOut();
         Navigator.pop(context);

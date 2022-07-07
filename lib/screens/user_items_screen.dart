@@ -4,6 +4,7 @@ import 'package:foodfair/models/items_model.dart';
 import 'package:foodfair/models/menus_model.dart';
 import 'package:foodfair/widgets/items_widget.dart';
 import 'package:provider/provider.dart';
+import '../global/color_manager.dart';
 import '../providers/sellers_provider.dart';
 import '../widgets/error_dialog.dart';
 import '../widgets/loading_container.dart';
@@ -29,7 +30,8 @@ class _UserItemsScreenState extends State<UserItemsScreen> {
   bool _init = true;
 
   @override
-  void didChangeDependencies() {
+  void initState() {
+    super.initState();
     if (_init) {
       _sellersProvider = Provider.of<SellersProvider>(context, listen: false);
       _sellersProvider
@@ -42,9 +44,11 @@ class _UserItemsScreenState extends State<UserItemsScreen> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorManager.lightPink,
       appBar: MyAppBar(/*sellerUID: widget.model!.sellerUID*/),
       // drawer: MyDrawer(),
       body: CustomScrollView(
@@ -81,9 +85,6 @@ class _UserItemsScreenState extends State<UserItemsScreen> {
                                   as Map<String, dynamic>);
                           return ItemsWidget(
                               itemModel: itemModel,
-                              context: context,
-                              sellerUID: widget.sellerUID
-                              //netValue: model.isOnline,
                               );
                         },
                         childCount: snapshot.data!.docs.length,

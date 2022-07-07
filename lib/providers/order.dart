@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:foodfair/providers/seller.dart';
 import 'package:foodfair/providers/total_amount.dart';
 import 'package:provider/provider.dart';
 import '../screens/user_home_screen.dart';

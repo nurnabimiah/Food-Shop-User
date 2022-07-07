@@ -20,7 +20,7 @@ class LoadingContainer extends StatelessWidget {
       //excludeFromSemantics: true,
       child: Container(
         color: Colors.grey[200],
-        height: MediaQuery.of(context).size.height * 0.05,
+        height: MediaQuery.of(context).size.height * 0.04,
         width: MediaQuery.of(context).size.width,
         margin: EdgeInsets.only(top: 5, bottom: 5),
       ),

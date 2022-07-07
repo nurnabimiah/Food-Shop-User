@@ -1,13 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:foodfair/providers/cart_provider.dart';
+import 'package:foodfair/providers/item_counter_provider.dart';
 import 'package:foodfair/providers/user_provider.dart';
 import 'package:foodfair/screens/address_screen.dart';
 import 'package:foodfair/screens/save_address_screen.dart';
 import 'package:foodfair/providers/address.dart';
-import 'package:foodfair/providers/cart_item_quantity.dart';
 import 'package:foodfair/providers/order_provider.dart';
-import 'package:foodfair/providers/seller.dart';
 import 'package:foodfair/providers/sellers_provider.dart';
 import 'package:foodfair/providers/total_amount.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -43,12 +42,12 @@ Future<void> main() async {
           create: (context) => OrderProvider(),
         ),
         ChangeNotifierProvider(
-          create: (context) => SellerProvider(),
-        ),
-        ChangeNotifierProvider(
           create: (context) => UserProvider(),
         ),
         ChangeNotifierProvider(create: (context)=> CartProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context)=> ItemCounterProvider(),
         ),
       ],
       child: MyApp(),

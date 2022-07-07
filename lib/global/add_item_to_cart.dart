@@ -1,10 +1,9 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:foodfair/screens/user_home_screen.dart';
-import 'package:foodfair/global/global_instance_or_variable.dart';
-import 'package:provider/provider.dart';
-import '../providers/cart_item_quantity.dart';
+
+import 'global_instance_or_variable.dart';
 
 //here we sepate items id from items collection
 separateItemsIdFromUserCartList() {

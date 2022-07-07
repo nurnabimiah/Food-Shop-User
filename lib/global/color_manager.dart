@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 
 class ColorManager {
-  // static String str = "djfd";
-  // static Color primary = HexColor.fromHex("#ED9728");
-  // static Color darkGrey = HexColor.fromHex("#525252");
-  // static Color greyy1 = HexColor.fromHex("#737477");
-  // static Color lightGrey = HexColor.fromHex("#9E9E9E");
-  // static Color primaryOpacity70 = HexColor.fromHex("#B3ED9728");
+  static Color darkGrey = HexColor.fromHex("#525252");
+  static Color lightPink = HexColor.fromHex("#E5E5E5");
+  static Color white1 = HexColor.fromHex("#FFFFFF");
+  static Color lightPink2 = Color.fromARGB(255, 255, 255, 1);
 
   static Color red1 = Color.fromARGB(255, 241, 207, 213);
   static Color red2 = Color(0xfff06292);
@@ -80,12 +78,12 @@ class ColorManager {
   static Color whiteOnly = Color(0xffffffff);
 }
 
-// extension HexColor on Color {
-//   static Color fromHex(String hexColorString) {
-//     hexColorString = hexColorString.replaceAll('#', '');
-//     if (hexColorString.length == 6) {
-//       hexColorString = "FF" + hexColorString; // 8 char with opacity 100%
-//     }
-//     return Color(int.parse(hexColorString, radix: 16));
-//   }
-// }
+extension HexColor on Color {
+  static Color fromHex(String hexColorString) {
+    hexColorString = hexColorString.replaceAll('#', '');
+    if (hexColorString.length == 6) {
+      hexColorString = "FF" + hexColorString; // 8 char with opacity 100%
+    }
+    return Color(int.parse(hexColorString, radix: 16));
+  }
+}

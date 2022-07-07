@@ -1,11 +1,12 @@
+
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:foodfair/models/cart_model.dart';
-import 'package:foodfair/models/order_model.dart';
-import 'package:foodfair/models/user_model.dart';
 
 import '../global/add_item_to_cart.dart';
 import '../global/global_instance_or_variable.dart';
+import '../models/cart_model.dart';
+import '../models/order_model.dart';
+import '../models/user_model.dart';
 
 class DbHelper {
   static final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -69,8 +70,6 @@ class DbHelper {
 
   //add to cart
   static Future<void> addToCart(String userId, CartModel cartModel)async{
-    print("userId = $userId");
-    print("cartModel = ${cartModel.toString()}");
     try{
       return _db.collection("users").doc(userId).collection("cart")
           .doc(cartModel.itemID).set(cartModel.toMap());
