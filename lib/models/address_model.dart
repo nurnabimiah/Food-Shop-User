@@ -1,5 +1,6 @@
 class AddressModel
 {
+  String? addressID;
   String? name;
   String? phoneNumber;
   String? flatNumber;
@@ -10,6 +11,7 @@ class AddressModel
   double? longitude;
 
   AddressModel({
+    this.addressID,
     this.name,
     this.phoneNumber,
     this.flatNumber,
@@ -20,8 +22,9 @@ class AddressModel
     this.longitude,
   });
 
-  AddressModel.fromJson(Map<String, dynamic> json)
+  AddressModel.fromMap(Map<String, dynamic> json)
   {
+    addressID = json['addressID'];
     name = json['name'];
     phoneNumber = json['phoneNumber'];
     flatNumber = json['flatNumber'];
@@ -32,9 +35,10 @@ class AddressModel
     longitude = json['longitude'];
   }
 
-  Map<String, dynamic> toJson()
+  Map<String, dynamic> toMap()
   {
     final Map<String, dynamic> data = Map<String, dynamic>();
+    data['addressID'] = addressID;
     data['name'] = name;
     data['phoneNumber'] = phoneNumber;
     data['flatNumber'] = flatNumber;

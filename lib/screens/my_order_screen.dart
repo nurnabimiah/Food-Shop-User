@@ -38,7 +38,6 @@ class _MyOrderSceenState extends State<MyOrderSceen> {
 
   @override
   Widget build(BuildContext context) {
-    // print("9 + ordermodel = + + BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBbbbb");
     print('');
     return SafeArea(
       child: Scaffold(
@@ -64,10 +63,10 @@ class _MyOrderSceenState extends State<MyOrderSceen> {
                             OrderModel orderModel = OrderModel.fromMap(
                                 snapshot.data!.docs[index].data()
                                     as Map<String, dynamic>);
-                            List<String> itemList = separatedItemIDFromOrdersCollection(orderModel.productIDs);
-                            for(int i=0; i<itemList.length; i++){
-                              print("itemId_1 in orscreen = ${itemList[i]}");
-                            }
+                            // List<String> itemList = separatedItemIDFromOrdersCollection(orderModel.productIDs);
+                            // for(int i=0; i<itemList.length; i++){
+                            //   print("itemId_1 in orscreen = ${itemList[i]}");
+                            // }
                             print('');
                             //inside of specific orderId have many itemQuantity
                             return FutureBuilder<QuerySnapshot>(
@@ -76,11 +75,11 @@ class _MyOrderSceenState extends State<MyOrderSceen> {
                               future: FirebaseFirestore.instance
                                   .collection(
                                   "items") /*insdie of items colleciton we will search which items are ordered.*/
-                                  .where("itemID",
+                                  /*.where("itemID",
                                   /*if itemID is exist in separateOrdersItemsIDs*/
                                   whereIn: itemList/*separatedItemIDFromOrdersCollection(
                                       (snapshot.data!.docs[index].data()!
-                                      as Map<String, dynamic>)["productIDs"])*/)
+                                      as Map<String, dynamic>)["productIDs"])*/)*/
                                   .get(),
                                 builder: (context, snap) {
                                     if(!snap.hasData){

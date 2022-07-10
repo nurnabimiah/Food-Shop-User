@@ -80,11 +80,13 @@ class _UserItemsScreenState extends State<UserItemsScreen> {
                   : SliverList(
                       delegate: SliverChildBuilderDelegate(
                         (BuildContext context, int index) {
-                          ItemModel itemModel = ItemModel.fromJson(
+                          ItemModel itemModel = ItemModel.fromMap(
                               snapshot.data!.docs[index].data()
                                   as Map<String, dynamic>);
+                          print("user screen in index = $index");
                           return ItemsWidget(
                               itemModel: itemModel,
+                              index: index,
                               );
                         },
                         childCount: snapshot.data!.docs.length,

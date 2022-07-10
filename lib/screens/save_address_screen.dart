@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:foodfair/global/global_instance_or_variable.dart';
 import 'package:foodfair/widgets/simple_appbar.dart';
+import 'package:provider/provider.dart';
 
 import '../models/address_model.dart';
+import '../providers/address_provider.dart';
 import '../widgets/my_text_field.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
@@ -17,6 +18,7 @@ class SaveAddressScreen extends StatefulWidget {
 }
 
 class _SaveAddressScreenState extends State<SaveAddressScreen> {
+  late AddressProvider _addressProvider;
   final _name = TextEditingController();
   final _phoneNumber = TextEditingController();
   final _flatNumber = TextEditingController();
@@ -57,6 +59,11 @@ class _SaveAddressScreenState extends State<SaveAddressScreen> {
     _completeAddress.text = fullAddress;
   }
 
+  void didChangeDependencies(){
+  _addressProvider = Provider.of<AddressProvider>(context, listen: false);
+  super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,15 +83,9 @@ class _SaveAddressScreenState extends State<SaveAddressScreen> {
                 city: _city.text.trim(),
                 latitude: position!.latitude,
                 longitude: position!.longitude,
-              ).toJson();
+              );
 
-              FirebaseFirestore.instance
-                  .collection("users")
-                  .doc(sPref!.getString("uid"))
-                  .collection("userAddress")
-                  .doc(DateTime.now().millisecondsSinceEpoch.toString())
-                  .set(addressModel)
-                  .then((value) {
+              _addressProvider.addAddress(addressModel).then((value) {
                 Fluttertoast.showToast(msg: "New Address has been saved.");
                 setState(() {
                    _formKey.currentState!.reset();

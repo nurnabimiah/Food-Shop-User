@@ -1,25 +1,24 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:foodfair/global/add_item_to_cart.dart';
 import 'package:foodfair/models/order_model.dart';
+import 'package:foodfair/providers/before_add_in_cart_item_counter_provider.dart';
 import 'package:foodfair/screens/user_home_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:foodfair/providers/order_provider.dart';
 import 'package:foodfair/widgets/container_decoration.dart';
 import '../global/color_manager.dart';
 import '../global/global_instance_or_variable.dart';
+import '../providers/cart_provider.dart';
 
 class PlacedOrderScreen extends StatefulWidget {
   //static final String path = "/PlacedOrderScreen";
   String? addressID;
-  String? sellerID;
-  double? tAmount;
 
   PlacedOrderScreen({
     Key? key,
     this.addressID,
-    this.sellerID,
-    this.tAmount,
   }) : super(key: key);
 
   @override
@@ -27,6 +26,19 @@ class PlacedOrderScreen extends StatefulWidget {
 }
 
 class _PlacedOrderScreenState extends State<PlacedOrderScreen> {
+  late CartProvider _cartProvider;
+  late OrderProvider _orderProvider;
+  bool _init = true;
+  void didChangeDependencies(){
+    if(_init){
+      _cartProvider = Provider.of<CartProvider>(context);
+      _orderProvider = Provider.of<OrderProvider>(context);
+      _orderProvider.getOrderConstants();
+
+    }
+    _init = false;
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,28 +73,31 @@ class _PlacedOrderScreenState extends State<PlacedOrderScreen> {
                     String orderId = timestamp.millisecondsSinceEpoch.toString();
                     final _orderModel = OrderModel(
                       addressID: widget.addressID,
-                      totalAmount: widget.tAmount,
+                      totalAmount: _cartProvider.cartItemsTotalPrice,
                       orderBy: sPref!.getString("uid"),
-                      productIDs: sPref!.getStringList("userCart")!,
-                      paymentDetails:"Cash on Delivery",
+                      paymentMethod: '',
                       orderTime: timestamp.toIso8601String(),
                       isSuccess: true,
-                      sellerUID: sellerUIDD,
+                      sellerUID: _cartProvider.cartModelList[0].sellerId,
                       riderUID: "",
                       status: "normal",
                       orderId: orderId,
+                      deliveryCharge: int.parse('${_orderProvider.orderConstantsModel.deliveryCharge}'),
+                      vat: int.parse('${_orderProvider.orderConstantsModel.vat}'),
+                      discount: int.parse('${_orderProvider.orderConstantsModel.discount}'),
                     );
 
-                    for(int i = 0; i<_orderModel.productIDs.length; i++){
-                      print("0 + productList = ${_orderModel.productIDs[i]} + AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-                    }
+                    // for(int i = 0; i<_orderModel.productIDs.length; i++){
+                    //   print("0 + productList = ${_orderModel.productIDs[i]} + AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                    // }
 
                     await Provider.of<OrderProvider>(context, listen: false)
-                        .addOrder(_orderModel, orderId).then((value){
-                          //clearCart(context);
-                          orderId = '';
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => const UserHomeScreen()));
+                        .addOrder(_orderModel, _cartProvider.cartModelList).then((value){
+                        _cartProvider.clearCart();
+                        previousSellerId = '';
+                        _cartProvider.itemIdAndQuantity = ['-1', '-1'];
+                         // orderId = '';
+                          Navigator.pushNamed(context, UserHomeScreen.path);
                           Fluttertoast.showToast(
                               msg: "Congratulations, Order has been placed successfully.");
                     });

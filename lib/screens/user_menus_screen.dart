@@ -108,7 +108,7 @@ class _UserMenusScreenState extends State<UserMenusScreen> {
                           : SliverList(
                               delegate: SliverChildBuilderDelegate(
                                 (BuildContext context, int index) {
-                                  MenusModel menuModel = MenusModel.fromJson(
+                                  MenusModel menuModel = MenusModel.fromMap(
                                       snapshot.data!.docs[index].data()
                                           as Map<String, dynamic>);
                                   return MenusWidget(

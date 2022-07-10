@@ -32,10 +32,7 @@ class _MenusWidgetState extends State<MenusWidget> {
       padding: EdgeInsets.only(top: 10, left: 15, right: 15),
       child: InkWell(
         onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => UserItemsScreen(model: widget.model, sellerUID: widget.sellerUID)));
+          Navigator.push(context,MaterialPageRoute(builder: (context)=> UserItemsScreen(model: widget.model, sellerUID: widget.sellerUID)));
         },
         splashColor: Colors.red,
         child: Column(

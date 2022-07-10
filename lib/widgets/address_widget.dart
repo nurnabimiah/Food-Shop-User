@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodfair/models/address_model.dart';
-import 'package:foodfair/providers/address.dart';
+import 'package:foodfair/providers/address_changer_provider.dart';
 import 'package:provider/provider.dart';
 import '../global/color_manager.dart';
 import '../global/map.dart';
@@ -9,16 +9,16 @@ import '../screens/placed_order_screen.dart';
 class AddressWidget extends StatefulWidget {
   final AddressModel? addressModel;
   final int? currentAddressIndex;
-  final int? value;
-  final String? addressID;
-  final double? totalAmount;
-  const AddressWidget({
+   final int? index; //value
+  // final String? addressID;
+  // final double? totalAmount;
+   AddressWidget({
     Key? key,
     this.addressModel,
-    this.currentAddressIndex,
-    this.value,
-    this.addressID,
-    this.totalAmount,
+     this.currentAddressIndex,
+     this.index,
+    // this.addressID,
+    // this.totalAmount,
   }) : super(key: key);
 
   @override
@@ -32,8 +32,7 @@ class _AddressWidgetState extends State<AddressWidget> {
     return InkWell(
       onTap: () {
         //select this address
-        Provider.of<AddressProvider>(context, listen: false)
-            .displayResult(widget.value);
+        Provider.of<AddressChangerProvider>(context, listen: false).getRadioButtonIndex(widget.index);
       },
       child: Card(
         child: Column(
@@ -42,12 +41,13 @@ class _AddressWidgetState extends State<AddressWidget> {
               children: [
                 Radio(
                   groupValue: widget.currentAddressIndex,
-                  value: widget.value!,
+                  value: widget.index!,
                   activeColor: Colors.black,
                   onChanged: (val) {
                     //provider
-                    Provider.of<AddressProvider>(context, listen: false)
-                        .displayResult(val);
+                    // Provider.of<AddressProvider>(context, listen: false)
+                    //     .displayResult(val);
+                    Provider.of<AddressChangerProvider>(context, listen: false).getRadioButtonIndex(val);
                   },
                 ),
                 Column(
@@ -148,7 +148,7 @@ class _AddressWidgetState extends State<AddressWidget> {
                 ),
               ),
             ),
-            widget.value == Provider.of<AddressProvider>(context).count
+            widget.index == Provider.of<AddressChangerProvider>(context).radioButtonIndex
                 ? ElevatedButton(
               onPressed: () {
                 //Navigator.pushNamed(context, PlacedOrderScreen.path, arguments: widget.addressID);
@@ -158,8 +158,7 @@ class _AddressWidgetState extends State<AddressWidget> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => PlacedOrderScreen(
-                          addressID: widget.addressID,
-                          tAmount: widget.totalAmount,
+                          addressID: widget.addressModel!.addressID,
                         )));
               },
               child: const Text(

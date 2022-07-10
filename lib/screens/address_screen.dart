@@ -1,13 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:foodfair/providers/address_changer_provider.dart';
+import 'package:foodfair/providers/address_provider.dart';
 import 'package:foodfair/widgets/progress_bar.dart';
-import 'package:foodfair/providers/address.dart';
 import 'package:foodfair/widgets/address_widget.dart';
-import 'package:foodfair/widgets/simple_appbar.dart';
 import 'package:provider/provider.dart';
-import '../global/global_instance_or_variable.dart';
 import '../models/address_model.dart';
-import '../providers/total_amount.dart';
 import 'save_address_screen.dart';
 
 class AddressScreen extends StatefulWidget {
@@ -18,10 +16,26 @@ class AddressScreen extends StatefulWidget {
 }
 
 class _AddressScreenState extends State<AddressScreen> {
+  late AddressProvider _addressProvider;
+  late AddressChangerProvider _addressChangerProvider;
+  bool _init = true;
+  void didChangeDependencies()async{
+    _addressProvider = Provider.of<AddressProvider>(context);
+    _addressChangerProvider = Provider.of<AddressChangerProvider>(context, listen: false);
+    if(_init){
+      await _addressProvider.fetchUserAllAddress();
+    }
+    _init = false;
+    super.didChangeDependencies();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: SimpleAppbar(title: "foodfair",),
+      //appBar: SimpleAppbar(title: "foodfair",),
+      appBar: AppBar(
+        title: Text("foodfair"),
+        centerTitle: true,
+      ),
       floatingActionButton: SizedBox(
         height: MediaQuery.of(context).size.height * 0.06,
         width: MediaQuery.of(context).size.width * 0.50,
@@ -56,42 +70,34 @@ class _AddressScreenState extends State<AddressScreen> {
               ),
             ),
           ),
-          Consumer2<AddressProvider, TotalAmountProvider>(
-              builder: (context, address, tAmount, ch) {
-            return Flexible(
-              child: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection("users")
-                    .doc(sPref!.getString("uid"))
-                    .collection("userAddress")
-                    .snapshots(),
-                builder: (context, snapshot) {
+           Flexible(
+              child: StreamBuilder(
+                stream: _addressProvider.queryAddress,
+                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+
                   return !snapshot.hasData
-                      ? Center(
-                          child: circularProgress(),
+                      ? const Center(
+                          child: CircularProgressIndicator(),
                         )
-                      : snapshot.data!.docs.length == 0
-                          ? Text("")
-                          : ListView.builder(
+                      : ListView.builder(
                               itemCount: snapshot.data!.docs.length,
                               shrinkWrap: true,
                               itemBuilder: (context, index) {
-                                AddressModel? addressModel = AddressModel.fromJson(
+                                AddressModel? addressModel = AddressModel.fromMap(
                                   snapshot.data!.docs[index].data()!
                                       as Map<String, dynamic>,
                                 );
                                 return AddressWidget(
-                                  currentAddressIndex: address.count,
-                                  value: index,
-                                  addressID: snapshot.data!.docs[index].id,
-                                  totalAmount: tAmount.totalAmount,
+                                   currentAddressIndex: _addressChangerProvider.radioButtonIndex,
+                                   index: index,
+                                  // addressID: snapshot.data!.docs[index].id,
+                                  // totalAmount: tAmount.totalAmount,
                                   addressModel: addressModel,
                                 );
                               });
                 },
               ),
-            );
-          }),
+            ),
         ],
       ),
     );

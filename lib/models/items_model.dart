@@ -25,7 +25,7 @@ class ItemModel {
     this.itemImageUrl,
   });
 
-  ItemModel.fromJson(Map<String, dynamic> json) {
+  ItemModel.fromMap(Map<String, dynamic> json) {
     menuID = json['menuID'];
     itemID = json['itemID'];
     sellerUID = json['sellerUID'];
@@ -38,7 +38,7 @@ class ItemModel {
     itemImageUrl = json['itemImageUrl'];
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data["menuID"] = menuID;
     data["itemID"] = itemID;

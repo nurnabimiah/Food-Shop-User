@@ -2,41 +2,48 @@ class OrderModel{
   String? addressID;
   num? totalAmount;
   String? orderBy;
-  List<String> productIDs = ['garbageValue'];
-  String? paymentDetails = "Cash on Delivery";
+  String? paymentMethod;
   String? orderTime;
   bool isSuccess =  true;
   String? sellerUID;
   String? riderUID =  "";
   String? status = "normal";
   String? orderId;
-
+  int? discount;
+  int? deliveryCharge;
+  int? vat;
+  // String? paymentDetails = "Cash on Delivery";
+  
   OrderModel({
       this.addressID,
       this.totalAmount,
       this.orderBy,
-      required this.productIDs,
-      this.paymentDetails,
+      this.paymentMethod,
       this.orderTime,
       required this.isSuccess,
       this.sellerUID,
       this.riderUID,
       this.status,
-      this.orderId});
+      this.orderId,
+      this.deliveryCharge,
+      this.vat,
+      this.discount,});
 
   Map<String, dynamic> toMap(){
     var map = <String, dynamic>{
+      "orderId": orderId,
       "addressID": addressID,
       "totalAmount": totalAmount,
       "orderBy": orderBy,
-      "productIDs": List<String>.from(productIDs.map((x) => x)),
-      "paymentDetails": paymentDetails,
+      "paymentMethod": paymentMethod,
       "orderTime": orderTime,
       "isSuccess": isSuccess,
       "sellerUID": sellerUID,
       "riderUID": riderUID,
       "status": status,
-      "orderId": orderId,
+      "deliveryCharge": deliveryCharge,
+      "vat": vat,
+      "discount": discount,
     };
     return map;
   }
@@ -45,13 +52,15 @@ class OrderModel{
     addressID: map['addressID'],
     totalAmount: map['totalAmount'],
     orderBy: map['orderBy'],
-    productIDs: List<String>.from(map["productIDs"].map((x) => x)),
-    paymentDetails: map['paymentDetails'],
+    paymentMethod: map['paymentMethod'],
     orderTime: map['orderTime'],
     isSuccess: map['isSuccess'],
     sellerUID: map['sellerUID'],
     riderUID: map['riderUID'],
     status: map['status'],
     orderId: map['orderId'],
+    deliveryCharge: map['deliveryCharge'],
+    vat: map['vat'],
+    discount: map['discount'],
   );
 }

@@ -12,7 +12,7 @@ class Sellers {
       this.sellerEmail,
       this.address});
 
-  Sellers.frmJson(Map<String, dynamic>? jsonValue) {
+  Sellers.frmMap(Map<String, dynamic>? jsonValue) {
     sellerUID = jsonValue!["sellerUID"];
     sellerName = jsonValue["sellerName"];
     sellerAvatarUrl = jsonValue["sellerAvatarUrl"];
@@ -20,7 +20,7 @@ class Sellers {
     address = jsonValue["address"];
   }
 
-  Map<String, dynamic>? toJson() {
+  Map<String, dynamic>? toMap() {
     final Map<String, dynamic>? data = <String, dynamic>{};
     data!["sellerUID"] = sellerUID;
     data["sellerName"] = sellerName;

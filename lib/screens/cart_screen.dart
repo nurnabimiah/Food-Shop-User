@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:foodfair/providers/item_counter_provider.dart';
+import 'package:foodfair/providers/before_add_in_cart_item_counter_provider.dart';
+import 'package:foodfair/screens/user_home_screen.dart';
 import 'package:foodfair/widgets/cart_widget.dart';
 import 'package:foodfair/widgets/text_widget_header.dart';
 import 'package:provider/provider.dart';
 import '../global/color_manager.dart';
+import '../global/global_instance_or_variable.dart';
 import '../providers/cart_provider.dart';
 import '../widgets/container_decoration.dart';
 import 'address_screen.dart';
+import 'auth_screen.dart';
 
 class CartScreen extends StatefulWidget {
+  static final String path = "/cartScreen";
   @override
   State<CartScreen> createState() => _CartScreenState();
 }
 
 class _CartScreenState extends State<CartScreen> {
   late CartProvider _cartProvider;
-  late ItemCounterProvider _itemCounterProvider;
   double _totalAmount = 0;
   bool _init = true;
 
@@ -24,7 +27,6 @@ class _CartScreenState extends State<CartScreen> {
   @override
   void didChangeDependencies() {
     _cartProvider = Provider.of<CartProvider>(context);
-    _itemCounterProvider = Provider.of<ItemCounterProvider>(context);
     super.didChangeDependencies();
   }
 
@@ -32,10 +34,6 @@ class _CartScreenState extends State<CartScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          leading: IconButton(onPressed: (
-
-          ){},
-            icon: Icon(Icons.arrow_back),),
           title: const Text("foods"),
           centerTitle: true,
           //automaticallyImplyLeading: false,
@@ -65,7 +63,7 @@ class _CartScreenState extends State<CartScreen> {
             ? null
             : floatingActionButtonMethod(),
         body: _cartProvider.cartModelList.isEmpty
-            ? Center(
+            ? const Center(
                 child: Text(
                   "Not yet added in cart",
                   style: TextStyle(
@@ -109,7 +107,7 @@ class _CartScreenState extends State<CartScreen> {
               );
             },
             childCount: _cartProvider
-                .cartModelList.length, /* ? snapshot.data!.docs.length : 0*/
+                .cartModelList.length,
           ),
         ),
       ],
@@ -130,7 +128,6 @@ class _CartScreenState extends State<CartScreen> {
                 heroTag: "btn1",
                 onPressed: () {
                   _cartProvider.clearCart();
-                  _itemCounterProvider.setItemCounterOne();
                 },
                 label: const Text(
                   "Clear cart",
@@ -154,7 +151,13 @@ class _CartScreenState extends State<CartScreen> {
             child: FloatingActionButton.extended(
               heroTag: "btn2",
               onPressed: () {
-                Navigator.of(context).pushNamed(AddressScreen.path);
+                if (firebaseAuth.currentUser != null) {
+                  Navigator.of(context).pushNamed(AddressScreen.path);
+                } else {
+
+                  Navigator.pushNamed(context, AuthScreen.path, arguments: "fromCartScreen");
+
+                }
               },
               label: const Text(
                 "Check Out",

@@ -19,7 +19,7 @@ import '../widgets/loading_container.dart';
 import 'cart_screen.dart';
 
 class UserHomeScreen extends StatefulWidget {
-  const UserHomeScreen({Key? key}) : super(key: key);
+  static final String path = "/homeScreen";
 
   @override
   State<UserHomeScreen> createState() => _UserHomeScreenState();
@@ -28,14 +28,17 @@ class UserHomeScreen extends StatefulWidget {
 class _UserHomeScreenState extends State<UserHomeScreen> {
   late SellersProvider _sellersProvider;
   late CartProvider _cartProvider;
+  late CartProvider _cartProvider2;
   bool _init = true;
   var isLoading = true;
   TextEditingController searchController = TextEditingController();
 
  @override
-  void didChangeDependencies() {
-   //print("1 isLoading = $isLoading");
+  void initState() {
+   super.initState();
+  // print("1 ininState = $isLoading");
    if(_init){
+    // print("2 ininState = $isLoading");
      _sellersProvider = Provider.of<SellersProvider>(context, listen: false);
      _cartProvider = Provider.of<CartProvider>(context, listen: false);
      _sellersProvider.fetchAllSellers().then((value) {
@@ -52,20 +55,15 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
    _init = false;
   }
 
+  //this only for updating cartListlength
+  void didChangeDependencies(){
+    _cartProvider2 = Provider.of<CartProvider>(context);
+   super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
-    print('');
-   print("i am in home");
-    for(var cartList in sPref!.getStringList("cartModelStringList")!){
-      //print("2 i am in home");
-      Map<String, dynamic> jsonDecodeData = jsonDecode(cartList);
-      final _carModel = CartModel.fromMap(jsonDecodeData);
-      //_cartModelList.add(_carModel);
-      print("_cartModel in home = ${_carModel.toMap()}");
-    }
-    print('');
-   print('');
-   print('');
+    print("user item screen ");
     return Scaffold(
       backgroundColor: ColorManager.lightPink,
       drawer: MyDrawer(),
@@ -115,7 +113,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                         SliverList(
                             delegate: SliverChildBuilderDelegate(
                               (BuildContext context, int index) {
-                                Sellers sModel = Sellers.frmJson(
+                                Sellers sModel = Sellers.frmMap(
                                     snapshot.data!.docs[index].data()
                                         as Map<String, dynamic>);
                                 return SellerProfileDesign(
@@ -139,10 +137,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       children: [
         IconButton(
           onPressed: () {
-            Navigator.push(
+            Navigator.pushNamed(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => CartScreen()));
+                CartScreen.path);
           },
           icon: const Icon(Icons.shopping_cart),
         ),
@@ -152,7 +149,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           child: Consumer<CartProvider>(
             builder: (context, cartProvider, ch) {
               return Text(
-                cartProvider.cartModelList.length.toString(),
+                _cartProvider2.cartModelList.length.toString(),
                 style: const TextStyle(
                     color: Colors.white, fontSize: 13),
               );

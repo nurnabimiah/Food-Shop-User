@@ -9,7 +9,6 @@ class SellersProvider with ChangeNotifier{
   Stream<QuerySnapshot<Map<String, dynamic>>>? get allSellersData => _allSellerData;
   Stream<QuerySnapshot<Map<String, dynamic>>>? get specificSellerMenus => _specificSellerMenus;
   Stream<QuerySnapshot<Map<String, dynamic>>>? get specificSellerItems => _specificSellerItems;
-
   //fetch all sellers
   Future<void> fetchAllSellers()async{
     _allSellerData = await DbHelper.fetchAllSellers();

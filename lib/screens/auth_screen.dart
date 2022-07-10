@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:foodfair/models/items_model.dart';
+import 'package:foodfair/screens/address_screen.dart';
 import 'package:foodfair/screens/cart_screen.dart';
 import 'package:foodfair/screens/user_items_details_screen.dart';
 import 'package:foodfair/screens/user_items_screen.dart';
@@ -13,15 +14,17 @@ import '../../global/global_instance_or_variable.dart';
 import '../../widgets/container_decoration.dart';
 import '../global/color_manager.dart';
 import '../providers/cart_provider.dart';
-import '../providers/item_counter_provider.dart';
+import '../providers/before_add_in_cart_item_counter_provider.dart';
 import 'registration_screen.dart';
 import 'user_home_screen.dart';
 
 class AuthScreen extends StatefulWidget {
-  ItemModel? itemModel;
-  double? buttonSize;
-
-  AuthScreen({this.itemModel, this.buttonSize});
+  static final String path = "/authScreen";
+  // ItemModel? itemModel;
+  // double? buttonSize;
+  //String? fromCartScreen;
+  //
+  // AuthScreen({this.fromCartScreen});
 
   @override
   State<AuthScreen> createState() => _AuthScreenState();
@@ -34,12 +37,12 @@ class _AuthScreenState extends State<AuthScreen> {
 
 
   late CartProvider _cartProvider;
-  late ItemCounterProvider _itemCounterProvider;
+  String? fromCartScreen;
 
   @override
   void didChangeDependencies() {
     _cartProvider = Provider.of<CartProvider>(context);
-    _itemCounterProvider = Provider.of<ItemCounterProvider>(context);
+    fromCartScreen = ModalRoute.of(context)!.settings.arguments.toString();
     super.didChangeDependencies();
   }
 
@@ -108,17 +111,16 @@ class _AuthScreenState extends State<AuthScreen> {
         // List<String> userCartList = snapShot.data()!["userCart"].cast<String>();
         // await sPref!.setStringList("userCart", userCartList);
 
-        // Navigator.pop(context);
-        // if(widget.buttonSize == 40){
-        //   _cartProvider.addToCart(
-        //       widget.itemModel!, _itemCounterProvider.itemCounter);
-        //   Navigator.push(context,
-        //       MaterialPageRoute(builder: (context) => CartScreen()));
-        // }
-        // else{
-        //   Navigator.push(context,
-        //       MaterialPageRoute(builder: (context) => UserHomeScreen()));
-        // }
+       // Navigator.pop(context);
+        if(sPref!.getString("uid") != null && fromCartScreen == "fromCartScreen"){
+          _cartProvider.addToCartInFirebaseAfterFirstLogin();
+          //Navigator.pushNamed(context, AddressScreen.path);
+          Navigator.pop(context);
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> AddressScreen()));
+        }
+        else{
+          Navigator.pushNamed(context, UserHomeScreen.path);
+        }
 
       } else {
         firebaseAuth.signOut();
@@ -137,6 +139,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print("fromCartScreen = $fromCartScreen + VVVVVVVVVVVVVVVVVVVVVvv");
     return Scaffold(
       body: Container(
         // padding: EdgeInsets.only(top: 200),

@@ -5,7 +5,7 @@ import 'user_home_screen.dart';
 import '../global/global_instance_or_variable.dart';
 
 class SplashScreen extends StatefulWidget {
-  static final String path = "/SplashScreen";
+  static final String path = "/splashScreen";
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -16,8 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(const Duration(seconds: 1), () async {
       //in if now current user is registered and it is saved locally with sharedPreferences
       // if (firebaseAuth.currentUser != null) {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const UserHomeScreen()));
+        Navigator.pushNamed(context, UserHomeScreen.path);
       // }
       //else {
       //   Navigator.push(context,

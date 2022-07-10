@@ -6,6 +6,8 @@ import 'package:foodfair/models/items_model.dart';
 import 'package:foodfair/models/order_model.dart';
 
 import '../global/global_instance_or_variable.dart';
+import '../models/cart_model.dart';
+import '../models/order_constants_model.dart';
 
 class OrderProvider with ChangeNotifier {
   Stream<QuerySnapshot<Map<String, dynamic>>>? _ordersData;
@@ -19,9 +21,22 @@ class OrderProvider with ChangeNotifier {
   //   return _itemModelList;
   // }
 
+  OrderConstantsModel orderConstantsModel = OrderConstantsModel();
+  List<OrderModel> userOrderList = [];
+  //List<CartModel> orderDetailsList = [];
+
+  void getOrderConstants() async {
+    DbHelper.fetchOrderConstants().listen((snapshot) {
+      if(snapshot.exists){
+        orderConstantsModel = OrderConstantsModel.fromMap(snapshot.data()!);
+        notifyListeners();
+      }
+    });
+  }
+
   //add order
-  Future<void> addOrder(OrderModel orderModel, String orderId) async {
-    return DbHelper.addOrder(orderModel, orderId);
+  Future<void> addOrder(OrderModel orderModel, List<CartModel> cartList) async {
+    return DbHelper.addOrder(orderModel, cartList);
   }
 
   //fetch orders for specific user

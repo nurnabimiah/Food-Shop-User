@@ -20,7 +20,7 @@ class MenusModel
     this.status,
   });
 
-  MenusModel.fromJson(Map<String, dynamic> json)
+  MenusModel.fromMap(Map<String, dynamic> json)
   {
     menuID = json["menuID"];
     sellerUID = json['sellerUID'];
@@ -31,7 +31,7 @@ class MenusModel
     status = json['status'];
   }
 
-  Map<String, dynamic> toJson()
+  Map<String, dynamic> toMap()
   {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data["menuID"] = menuID;

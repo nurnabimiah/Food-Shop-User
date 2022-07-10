@@ -1,15 +1,19 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:foodfair/providers/cart_provider.dart';
-import 'package:foodfair/providers/item_counter_provider.dart';
+import 'package:foodfair/providers/before_add_in_cart_item_counter_provider.dart';
 import 'package:foodfair/providers/user_provider.dart';
 import 'package:foodfair/screens/address_screen.dart';
+import 'package:foodfair/screens/auth_screen.dart';
+import 'package:foodfair/screens/cart_screen.dart';
 import 'package:foodfair/screens/save_address_screen.dart';
-import 'package:foodfair/providers/address.dart';
 import 'package:foodfair/providers/order_provider.dart';
 import 'package:foodfair/providers/sellers_provider.dart';
-import 'package:foodfair/providers/total_amount.dart';
+import 'package:foodfair/screens/user_home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'providers/address_changer_provider.dart';
+import 'providers/address_provider.dart';
 import 'providers/internet_connectivity.dart';
 import 'screens/splash_screen.dart';
 import 'global/global_instance_or_variable.dart';
@@ -29,15 +33,6 @@ Future<void> main() async {
           //child: const UserHomeScreen(),
         ),
         ChangeNotifierProvider(create: (context) => SellersProvider()),
-        // ChangeNotifierProvider(
-        //   create: (context) => CartItemQuanityProvider(),
-        // ),
-        ChangeNotifierProvider(
-          create: (context) => TotalAmountProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => AddressProvider(),
-        ),
         ChangeNotifierProvider(
           create: (context) => OrderProvider(),
         ),
@@ -47,8 +42,14 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (context)=> CartProvider(),
         ),
         ChangeNotifierProvider(
-          create: (context)=> ItemCounterProvider(),
+          create: (context)=> AddressProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (context)=> AddressChangerProvider(),
+        ),
+        // ChangeNotifierProvider(
+        //   create: (context)=> BeforeAddInCardItemCounterProvider(),
+        // ),
       ],
       child: MyApp(),
     ),
@@ -70,8 +71,12 @@ class MyApp extends StatelessWidget {
       home: SplashScreen(),
       //initialRoute: SplashScreen(),
       routes: {
+        SplashScreen.path: (context)=> SplashScreen(),
         AddressScreen.path: (context) => AddressScreen(),
         SaveAddressScreen.path: (context) => SaveAddressScreen(),
+        UserHomeScreen.path: (context) => UserHomeScreen(),
+        CartScreen.path: (context) => CartScreen(),
+        AuthScreen.path: (context)=> AuthScreen(),
         //PlacedOrderScreen.path: (context) => PlacedOrderScreen(),
       },
     );

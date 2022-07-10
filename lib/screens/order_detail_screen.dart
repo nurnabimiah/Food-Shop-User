@@ -103,7 +103,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                           builder: (c, snapshot) {
                             return snapshot.hasData
                                 ? ShipmentAddressWidget(
-                                    addressModel: AddressModel.fromJson(
+                                    addressModel: AddressModel.fromMap(
                                         snapshot.data!.data()!
                                             as Map<String, dynamic>),
                                   )

@@ -52,7 +52,7 @@ class _MyOrderWidgetState extends State<MyOrderWidget> {
             itemCount: widget.itemCount,
             physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index){
-              ItemModel itemModel = ItemModel.fromJson(widget.data![index].data()! as Map<String, dynamic>);
+              ItemModel itemModel = ItemModel.fromMap(widget.data![index].data()! as Map<String, dynamic>);
               for(int i=0; i<widget.data!.length; i++){
                 print("itemId = ${widget.data![i].id}");
               }

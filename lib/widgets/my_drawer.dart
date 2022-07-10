@@ -1,17 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:foodfair/providers/cart_provider.dart';
 import 'package:foodfair/screens/my_order_screen.dart';
 import 'package:foodfair/screens/user_home_screen.dart';
 import 'package:foodfair/global/global_instance_or_variable.dart';
+import 'package:provider/provider.dart';
 
 import '../global/color_manager.dart';
 import '../screens/auth_screen.dart';
 
-class MyDrawer extends StatelessWidget {
-  //const MyDrawer({Key? key}) : super(key: key);
+class MyDrawer extends StatefulWidget {
+  @override
+  State<MyDrawer> createState() => _MyDrawerState();
+}
 
+class _MyDrawerState extends State<MyDrawer> {
+  late CartProvider _cartProvider;
   double? size;
+
+  void didChangeDependencies()async{
+    _cartProvider = Provider.of<CartProvider>(context);
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
+    print("object = ${sPref!.getString("photoUrl")}");
     size = MediaQuery.of(context).size.height;
     return Drawer(
       child: ListView(
@@ -21,7 +34,7 @@ class MyDrawer extends StatelessWidget {
             color: ColorManager.amber1,
             child: Column(
               children: [
-                Material(
+                sPref!.getString("photoUrl") == '' ? Text('') : Material(
                   borderRadius: BorderRadius.all(Radius.circular(80)),
                   elevation: 10,
                   child: Container(
@@ -29,9 +42,8 @@ class MyDrawer extends StatelessWidget {
                     height: size! * 0.2,
                     // height: 160,
                     // width: 160,
-                    child: CircleAvatar(
-                      backgroundImage:
-                      NetworkImage("${sPref!.getString("photoUrl")}"),
+                    child:  CircleAvatar(
+                      backgroundImage: NetworkImage("${sPref!.getString("photoUrl")}"),
                     ),
                   ),
                 ),
@@ -67,7 +79,7 @@ class MyDrawer extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const UserHomeScreen()));
+                      builder: (context) =>  UserHomeScreen()));
             },
           ),
           const Divider(thickness: 1),
@@ -118,9 +130,10 @@ class MyDrawer extends StatelessWidget {
               'Logout',
               style: TextStyle(color: Colors.black),
             ),
-            onTap: () {
+            onTap: () async{
+
               firebaseAuth.signOut().then((value) async{
-                //sPref!.setString("uid", '');
+                sPref!.setString("uid", '');
                 await sPref!.setString("photoUrl", '');
                 await sPref!.setString("name", '');
                 await  sPref!.setString("email", '');
@@ -129,10 +142,19 @@ class MyDrawer extends StatelessWidget {
                 // await sPref!.setString("email", currentUser.email.toString());
                 // await sPref!.setString("name", nameController.text.trim());
                 // await sPref!.setString("photoUrl", userImageUrl!);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => AuthScreen()));
+                print("loagut ");
+
+                     _cartProvider.cartModelList.clear();
+                    _cartProvider.clearCart().then((value){
+                      print("loagut 2");
+                      print("carlist.lengt = ${_cartProvider.cartModelList.length}");
+                      Navigator.pushNamed(context, UserHomeScreen.path);
+
+                      //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> UserHomeScreen()));
+                    });
+
+                // Navigator.pushReplacement(context, MaterialPageRoute(
+                //     builder: (context) => AuthScreen()));
               });
             },
           ),
