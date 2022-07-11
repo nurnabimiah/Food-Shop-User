@@ -47,6 +47,7 @@ class _UserItemsScreenState extends State<UserItemsScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: ColorManager.lightPink,
       appBar: MyAppBar(/*sellerUID: widget.model!.sellerUID*/),
@@ -83,7 +84,6 @@ class _UserItemsScreenState extends State<UserItemsScreen> {
                           ItemModel itemModel = ItemModel.fromMap(
                               snapshot.data!.docs[index].data()
                                   as Map<String, dynamic>);
-                          print("user screen in index = $index");
                           return ItemsWidget(
                               itemModel: itemModel,
                               index: index,

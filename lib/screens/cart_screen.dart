@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:foodfair/providers/before_add_in_cart_item_counter_provider.dart';
-import 'package:foodfair/screens/user_home_screen.dart';
 import 'package:foodfair/widgets/cart_widget.dart';
 import 'package:foodfair/widgets/text_widget_header.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +11,7 @@ import 'auth_screen.dart';
 
 class CartScreen extends StatefulWidget {
   static final String path = "/cartScreen";
+
   @override
   State<CartScreen> createState() => _CartScreenState();
 }
@@ -20,7 +19,6 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   late CartProvider _cartProvider;
   double _totalAmount = 0;
-  bool _init = true;
 
   //didChangeDependencies always will be called when data will change and it also rebuilds
   //ui.  but initState may not be called though data will change and it may not rebuild ui.
@@ -106,8 +104,7 @@ class _CartScreenState extends State<CartScreen> {
                 total: _totalAmount,
               );
             },
-            childCount: _cartProvider
-                .cartModelList.length,
+            childCount: _cartProvider.cartModelList.length,
           ),
         ),
       ],
@@ -154,9 +151,8 @@ class _CartScreenState extends State<CartScreen> {
                 if (firebaseAuth.currentUser != null) {
                   Navigator.of(context).pushNamed(AddressScreen.path);
                 } else {
-
-                  Navigator.pushNamed(context, AuthScreen.path, arguments: "fromCartScreen");
-
+                  Navigator.pushNamed(context, AuthScreen.path,
+                      arguments: "fromCartScreen");
                 }
               },
               label: const Text(

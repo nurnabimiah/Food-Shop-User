@@ -17,7 +17,7 @@ class _MyDrawerState extends State<MyDrawer> {
   late CartProvider _cartProvider;
   double? size;
 
-  void didChangeDependencies()async{
+  void didChangeDependencies() async {
     _cartProvider = Provider.of<CartProvider>(context);
     super.didChangeDependencies();
   }
@@ -34,33 +34,40 @@ class _MyDrawerState extends State<MyDrawer> {
             color: ColorManager.amber1,
             child: Column(
               children: [
-                sPref!.getString("photoUrl") == '' ? Text('') : Material(
-                  borderRadius: BorderRadius.all(Radius.circular(80)),
-                  elevation: 10,
-                  child: Container(
-                    width: size! * 0.2,
-                    height: size! * 0.2,
-                    // height: 160,
-                    // width: 160,
-                    child:  CircleAvatar(
-                      backgroundImage: NetworkImage("${sPref!.getString("photoUrl")}"),
-                    ),
-                  ),
-                ),
+                sPref!.getString("photoUrl") == null
+                    ? Text('')
+                    : Material(
+                        borderRadius: BorderRadius.all(Radius.circular(80)),
+                        elevation: 10,
+                        child: Container(
+                          width: size! * 0.2,
+                          height: size! * 0.2,
+                          // height: 160,
+                          // width: 160,
+                          child: CircleAvatar(
+                            backgroundImage:
+                                NetworkImage("${sPref!.getString("photoUrl")}"),
+                          ),
+                        ),
+                      ),
                 const SizedBox(
                   height: 10,
                 ),
-                Text(
-                  "${sPref!.getString("name")}",
-                  style: TextStyle(color: Colors.black, fontSize: 20),
-                ),
+                sPref!.getString("name") == null
+                    ? Text('')
+                    : Text(
+                        "${sPref!.getString("name")}",
+                        style: TextStyle(color: Colors.black, fontSize: 20),
+                      ),
                 const SizedBox(
                   height: 10,
                 ),
-                Text(
-                  "${sPref!.getString("email")}",
-                  style: TextStyle(color: Colors.black, fontSize: 17),
-                ),
+                sPref!.getString("email") == null
+                    ? Text('')
+                    : Text(
+                        "${sPref!.getString("email")}",
+                        style: TextStyle(color: Colors.black, fontSize: 17),
+                      ),
               ],
             ),
           ),
@@ -76,10 +83,8 @@ class _MyDrawerState extends State<MyDrawer> {
               style: TextStyle(color: Colors.black),
             ),
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>  UserHomeScreen()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => UserHomeScreen()));
             },
           ),
           const Divider(thickness: 1),
@@ -90,10 +95,8 @@ class _MyDrawerState extends State<MyDrawer> {
               style: TextStyle(color: Colors.black),
             ),
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>  MyOrderSceen()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => MyOrderSceen()));
             },
           ),
           const Divider(thickness: 1),
@@ -130,13 +133,12 @@ class _MyDrawerState extends State<MyDrawer> {
               'Logout',
               style: TextStyle(color: Colors.black),
             ),
-            onTap: () async{
-
-              firebaseAuth.signOut().then((value) async{
+            onTap: () async {
+              firebaseAuth.signOut().then((value) async {
                 sPref!.setString("uid", '');
                 await sPref!.setString("photoUrl", '');
                 await sPref!.setString("name", '');
-                await  sPref!.setString("email", '');
+                await sPref!.setString("email", '');
 
                 // await sPref!.setString("uid", currentUser.uid);
                 // await sPref!.setString("email", currentUser.email.toString());
@@ -144,14 +146,15 @@ class _MyDrawerState extends State<MyDrawer> {
                 // await sPref!.setString("photoUrl", userImageUrl!);
                 print("loagut ");
 
-                     _cartProvider.cartModelList.clear();
-                    _cartProvider.clearCart().then((value){
-                      print("loagut 2");
-                      print("carlist.lengt = ${_cartProvider.cartModelList.length}");
-                      Navigator.pushNamed(context, UserHomeScreen.path);
+                _cartProvider.cartModelList.clear();
+                _cartProvider.clearCart().then((value) {
+                  print("loagut 2");
+                  print(
+                      "carlist.lengt = ${_cartProvider.cartModelList.length}");
+                  Navigator.pushNamed(context, UserHomeScreen.path);
 
-                      //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> UserHomeScreen()));
-                    });
+                  //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> UserHomeScreen()));
+                });
 
                 // Navigator.pushReplacement(context, MaterialPageRoute(
                 //     builder: (context) => AuthScreen()));

@@ -55,6 +55,7 @@ class _UserMenusScreenState extends State<UserMenusScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // print("menu screen");
     return Scaffold(
       backgroundColor: ColorManager.lightPink,
       appBar: AppBar(

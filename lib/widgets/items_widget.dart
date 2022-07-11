@@ -45,7 +45,10 @@ class _ItemsWidgetState extends State<ItemsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    print("rebuild .........................");
+    if(int.parse(_cartProvider.itemIdAndQuantity[1]) > 1 && _cartProvider.doubleCheck == 0){
+      _cartProvider.itemIdAndQuantity[1] = 1.toString();
+      _cartProvider.itemCounter = 1;
+    }
     return Padding(
       padding: EdgeInsets.only(top: 15, left: 15, right: 15),
       child: Container(
@@ -118,194 +121,25 @@ class _ItemsWidgetState extends State<ItemsWidget> {
                         fontSize: 14,
                         fontWeight: FontWeight.normal),
                   ),
-                  //DecreasingWidget(itemModel: widget.itemModel!),
-                  SizedBox(
-                    // height: widget.buttonSize,
-                    child: IconButton(
-                      onPressed: () {
-                        //if already item in cart then just need to update
-                        if (_cartProvider
-                            .isAlreadyIncart(widget.itemModel!.itemID!)) {
-                          //it needs (i)
-                          _cartProvider.decreaseItemQuantityInLocalOrFirebase(
-                              widget.itemModel!.itemID!);
-                        }
-                        //this is for local and sending itemCounter with addToCart method
-                        else {
-                          _cartProvider
-                              .decreaseItemCounterBeforeAddInCart(
-                                  widget.itemModel!.itemID!);
-                        }
-                      },
-                      icon: const Icon(Icons.remove),
-                    ),
-                  ),
-
+                  DecreasingWidget(itemModel: widget.itemModel!),
                   Text(
                     _cartProvider.isAlreadyIncart(widget.itemModel!.itemID!)
                         ? "${_cartProvider.findQuantityInCartModelWithThisId(widget.itemModel!.itemID!)}"
                         : _cartProvider.itemIdAndQuantity[0] ==
-                                widget.itemModel!.itemID!
-                            ? _cartProvider
-                                .itemIdAndQuantity[1] /*this String*/
-                            :  "${_cartProvider.defaultItemQuanity}",
+                                widget.itemModel!.itemID! /*&& _cartProvider.doubleCheck == 1*/
+                            ? _cartProvider.itemIdAndQuantity[1] /*this String*/
+                            : /*"${_cartProvider.defaultItemQuanity}"*/ "1",
                     style: TextStyle(fontSize: 16),
                   ),
 
-                  IconButton(
-                    onPressed: () async {
-                      //previous selleId is set with sellerId while fetching cartItems in cartProvider
-                      String currentSellerId = widget.itemModel!.sellerUID!;
-
-                      if (previousSellerId == '' ||
-                          previousSellerId == currentSellerId) {
-                        previousSellerId = widget.itemModel!.sellerUID!;
-
-                        if (_cartProvider
-                            .isAlreadyIncart(widget.itemModel!.itemID!)) {
-                          //(i)here setState need because again this whole screen need to be rebuild to
-                          //call this findQuantityInCartModelWithThisId method() again
-                          //one thing keep in mind didChangeDependencies or init will not rebuild
-                          //though already in cart but this cart not assigned in firebase then else for
-                          // increasing
-                          _cartProvider.increaseItemQuantityInLocalOrFirebase(
-                              widget.itemModel!.itemID!);
-                        } else {
-                          _cartProvider
-                              .increaseItemCounterBeforeAddInCart(
-                                  widget.itemModel!.itemID!);
-                        }
-                      } else {
-                        //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("order at first")));
-                        return await showDialog(
-                            context: (context),
-                            builder: (context) => AlertDialog(
-                                  title:
-                                      const Text('Remove your previous items?'),
-                                  content: const Text(
-                                      "You have added products in cart from another restaurant. Do you want to remove those?"),
-                                  actions: [
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        TextButton(
-                                            onPressed: () {
-                                              //if user increases itemCounter but not able to
-                                              // add in cart then it is necessary.
-                                              //_itemCounterProvider.setItemCounterOne();
-                                              Navigator.pop(context);
-                                            },
-                                            child: const Text("no")),
-                                        TextButton(
-                                            onPressed: () {
-                                              previousSellerId = '';
-                                              _cartProvider.clearCart();
-                                              _cartProvider.itemIdAndQuantity = ['-1', '-1'];
-                                              // setState((){});
-                                              Navigator.pop(context);
-
-                                              // _cartProvider
-                                              //     .addToCartLocalOrFirebase(
-                                              //         widget.itemModel!,
-                                              //     int.parse(_beforeAddInCardItemCounterProvider.itemIdAndQuantity[1]));
-                                              //for default quantity
-
-                                              //Navigator.pop(context);
-                                            },
-                                            child: const Text("yes"))
-                                      ],
-                                    ),
-                                  ],
-                                ));
-                      }
-                    },
-                    icon: const Icon(Icons.add),
+                  //increase widget
+                  IncreasingWidget(
+                    itemModel: widget.itemModel,
                   ),
-
-                  SizedBox(
-                    //height: widget.buttonSize,
-                    child: TextButton(
-                      child: Text(
-                        _cartProvider.isAlreadyIncart(widget.itemModel!.itemID!)
-                            ? 'remove'
-                            : 'Add to cart',
-                      ),
-                      style: TextButton.styleFrom(
-                        backgroundColor: Colors.teal,
-                        primary: Colors.white,
-                        //Primary: Colors.white,
-                        shape: const BeveledRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(3))),
-                      ),
-                      onPressed: () async {
-                        //previous selleId is set with sellerId while fetching cartItems in cartProvider
-                        String currentSellerId = widget.itemModel!.sellerUID!;
-
-                        if (previousSellerId == '' ||
-                            previousSellerId == currentSellerId) {
-                          previousSellerId = widget.itemModel!.sellerUID!;
-                          if (_cartProvider
-                              .isAlreadyIncart(widget.itemModel!.itemID!)) {
-                            _cartProvider
-                                .removeFromCartInLocalOrFirebase(widget.itemModel!.itemID!);
-                            //check......
-                            // setState((){
-                            //   removeButtonValue = 20;
-                            // });
-                            //_cartProvider.rebuildItemWidget();
-                          } else {
-                            _cartProvider.addToCartLocalOrFirebase(
-                                widget.itemModel!,
-                                int.parse(_cartProvider
-                                    .itemIdAndQuantity[1]));
-                            //setState(() {});
-                          }
-                        } else {
-                          //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("order at first")));
-                          return await showDialog(
-                              context: (context),
-                              builder: (context) => AlertDialog(
-                                    title: const Text(
-                                        'Remove your previous items?'),
-                                    content: const Text(
-                                        "You have added products in cart from another restaurant. Do you want to remove those?"),
-                                    actions: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          TextButton(
-                                              onPressed: () {
-                                                //if user increases itemCounter but not able to
-                                                // add in cart then it is necessary.
-                                                //_itemCounterProvider.setItemCounterOne();
-                                                Navigator.pop(context);
-                                              },
-                                              child: const Text("no")),
-                                          TextButton(
-                                              onPressed: () {
-                                                previousSellerId = '';
-                                                _cartProvider.clearCart();
-                                                _cartProvider.itemIdAndQuantity = ['-1', '-1'];
-                                                // setState((){});
-                                                Navigator.pop(context);
-                                                // _cartProvider
-                                                //     .addToCartLocalOrFirebase(
-                                                //         widget.itemModel!,
-                                                //     int.parse(_beforeAddInCardItemCounterProvider.itemIdAndQuantity[1]));
-                                                //for default quantity
-
-                                                //Navigator.pop(context);
-                                              },
-                                              child: const Text("yes"))
-                                        ],
-                                      ),
-                                    ],
-                                  ));
-                        }
-                      },
-                    ),
-                  )
+                  //add and remove widget
+                  AddandRemoveIntoCartWidget(
+                    itemModel: widget.itemModel,
+                  ),
                 ],
               ),
             ],

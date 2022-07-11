@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:foodfair/models/items_model.dart';
 import '../db/db_helper.dart';
 import '../global/global_instance_or_variable.dart';
@@ -7,9 +6,6 @@ import '../models/cart_model.dart';
 
 class CartProvider with ChangeNotifier {
   List<CartModel> cartModelList = [];
-
- // List<CartModel> get cartModelList => _cartModelList;
-  //int get infiniteChecking => _infiniteChecking;
 
   Future<void> addToCartLocalOrFirebase(ItemModel itemModel, int quantity) async {
     final cartModel = CartModel(
@@ -28,6 +24,9 @@ class CartProvider with ChangeNotifier {
     }else{
       //add local cart when user has not logged in
       cartModelList.add(cartModel);
+      itemCounter = 1;
+      itemIdAndQuantity[1] = itemCounter.toString();
+      itemIdAndQuantity[0] = '-1';
       notifyListeners();
     }
   }
@@ -90,10 +89,11 @@ class CartProvider with ChangeNotifier {
        }
      }
 
-    if(sPref!.getString("uid") != ''){
+    if(sPref!.getString("uid") != null){
       cartModel2!.quantity = 1;
       itemIdAndQuantity[1] = cartModel2.quantity.toString();
-      _itemCounter = 1;
+      //itemIdAndQuantity[0] == '-1';
+      itemCounter = 1;
       notifyListeners();
       DbHelper.removeFromCart(itemId, sPref!.getString("uid")!).then((value) {
         if (cartModelList.isEmpty) {
@@ -101,7 +101,6 @@ class CartProvider with ChangeNotifier {
         }
       });
     }else{
-
       cartModelList.remove(cartModel2);
 
       // for(var cartModel in cartModelList){
@@ -115,7 +114,8 @@ class CartProvider with ChangeNotifier {
           //add this all are for locally
           cartModel2!.quantity = 1;
           itemIdAndQuantity[1] = cartModel2.quantity.toString();
-          _itemCounter = 1;
+          itemIdAndQuantity[0] = '-1';
+          itemCounter = 1;
           notifyListeners();
       //     break;
       //   }
@@ -126,6 +126,7 @@ class CartProvider with ChangeNotifier {
     }
   }
 
+  int doubleCheck = 0;
   //increasing item quantity in firebase
   void increaseItemQuantityInLocalOrFirebase(String itemId) {
     CartModel cartModel;
@@ -134,9 +135,10 @@ class CartProvider with ChangeNotifier {
     //price etc. so here cartModel is necessary
     for (int i = 0; i < cartModelList.length; i++) {
       if (cartModelList[i].itemID == itemId) {
+        doubleCheck = 0;
         cartModel = cartModelList[i];
         cartModel.quantity += 1;
-        if(sPref!.getString("uid") != ''){
+        if(sPref!.getString("uid") != null){
           DbHelper.updateCartQuantity(cartModel, sPref!.getString("uid")!);
           break;
         }
@@ -158,9 +160,10 @@ class CartProvider with ChangeNotifier {
     for (int i = 0; i < cartModelList.length; i++) {
       if (cartModelList[i].itemID == itemId) {
         cartModel = cartModelList[i];
+        doubleCheck = 0;
         //I will not decrease if quantity 1
         cartModel.quantity > 1 ? cartModel.quantity -= 1 : cartModel.quantity;
-        if(sPref!.getString("uid") != ''){
+        if(sPref!.getString("uid") != null){
           DbHelper.updateCartQuantity(cartModel, sPref!.getString("uid")!);
           break;
         }
@@ -178,11 +181,9 @@ class CartProvider with ChangeNotifier {
   //find quantity for specific item in CartModel
   //this needs when item is already in cart
   int findQuantityInCartModelWithThisId(String itemId){
-    print("findQuantityInCartModelWithThisId = 1");
     CartModel? cartModel;
     for (int i = 0; i < cartModelList.length; i++) {
       if (cartModelList[i].itemID == itemId) {
-        print("findQuantityInCartModelWithThisId = 2");
         cartModel = cartModelList[i];
         break;
       }
@@ -197,10 +198,10 @@ class CartProvider with ChangeNotifier {
   Future<void> clearCart()async{
     for(var cartModel in cartModelList){
       cartModel.quantity = 1;
-      _itemCounter = 1;
+      itemCounter = 1;
       itemIdAndQuantity[1] = 1.toString();
     }
-    if(sPref!.getString("uid") != ''){
+    if(sPref!.getString("uid") != null){
       DbHelper.removeAllitemsFromCart(sPref!.getString("uid")!, cartModelList).then((value){
         previousSellerId = '';
       });
@@ -212,57 +213,49 @@ class CartProvider with ChangeNotifier {
   }
 
   //it needs a particular section from above code
-  int _itemCounter = 1;
+  int itemCounter = 1;
+  String? _itemId;
+  String? get getterItemId => _itemId;
+  //int get itemCounter => _itemCounter;
   List<String> itemIdAndQuantity = ["-1","-1"];
 
-  //decrease items
+  //decrease items items locally before adding in cart
   void decreaseItemCounterBeforeAddInCart(String itemId){
     //locally decreasing for the first time item added in cart with addToCart method
-    if(_itemCounter == 1){}
+    if(itemCounter == 1){
+      return;
+    }
     else{
+      doubleCheck = 1;
+      _itemId = itemId;
       //locally decreasing for the first time befor pressing add to cart
       //_indexAndQuantity[0] == this previous index
       if(itemIdAndQuantity[0] == itemId){
-        _itemCounter -= 1;
+        itemCounter -= 1;
       }else{
-        _itemCounter = 1;
-        _itemCounter -= 1;
+        itemCounter = 1;
       }
       itemIdAndQuantity[0] = itemId;
-      itemIdAndQuantity[1] = _itemCounter.toString();
+      itemIdAndQuantity[1] = itemCounter.toString();
     }
     notifyListeners();
   }
-  //increase items
+  //increase items locally before adding in cart
   void increaseItemCounterBeforeAddInCart(String itemId){
-
+    _itemId = itemId;
+    doubleCheck = 1;
     //locally increasing for the first time befor pressing add to cart
     //_indexAndQuantity[0] == this previous index
-    if(itemIdAndQuantity[0] == itemId){
-      _itemCounter += 1;
-    }else{
-      _itemCounter = 1;
-      _itemCounter += 1;
+    if(itemIdAndQuantity[0] == itemId || itemIdAndQuantity[0] == '-1'){
+      itemCounter += 1;
+    }
+    else if(itemIdAndQuantity[0] != itemId){
+      itemCounter = 1;
+      itemCounter += 1;
     }
     itemIdAndQuantity[0] = itemId;
-    itemIdAndQuantity[1] = _itemCounter.toString();
-    notifyListeners();
-  }
-  //if user increases itemCounter but not able to
-  // add in cart then it is necessary.
-  int get defaultItemQuanity{
-    // _itemIdAndQuantity = ["-1", "-1"];
-    // WidgetsBinding.instance.addPostFrameCallback((_){
-    //   notifyListeners();
-    // });
-    return 1;
-  }
-
-  //just for rebuilding itemWidget
-  int? _rebuild;
-  int? get rebuild => _rebuild;
-  void rebuildItemWidget(){
-    //itemIdAndQuantity[0] = '-1';
+    itemIdAndQuantity[1] = itemCounter.toString();
+    // _itemCounter = 1;
     notifyListeners();
   }
 }
