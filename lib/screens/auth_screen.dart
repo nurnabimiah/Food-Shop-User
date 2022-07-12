@@ -14,12 +14,12 @@ import '../../global/global_instance_or_variable.dart';
 import '../../widgets/container_decoration.dart';
 import '../global/color_manager.dart';
 import '../providers/cart_provider.dart';
-import '../providers/before_add_in_cart_item_counter_provider.dart';
 import 'registration_screen.dart';
 import 'user_home_screen.dart';
 
 class AuthScreen extends StatefulWidget {
   static final String path = "/authScreen";
+
   // ItemModel? itemModel;
   // double? buttonSize;
   //String? fromCartScreen;
@@ -34,7 +34,6 @@ class _AuthScreenState extends State<AuthScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController? emailController = TextEditingController();
   TextEditingController? passwordController = TextEditingController();
-
 
   late CartProvider _cartProvider;
   String? fromCartScreen;
@@ -105,23 +104,27 @@ class _AuthScreenState extends State<AuthScreen> {
         //snapshot.data()![""] = all comes from FireStore Database
         await sPref!.setString("email", snapShot.data()!["userEmail"]);
         await sPref!.setString("name", snapShot.data()!["userName"]);
-        await sPref!.setString("photoUrl", snapShot.data()!["userPhotoUrl"]);
 
-        //from firestore the data come as dynamic so here need to be casted 
+        //from firestore the data come as dynamic so here need to be casted
         // List<String> userCartList = snapShot.data()!["userCart"].cast<String>();
         // await sPref!.setStringList("userCart", userCartList);
 
-       // Navigator.pop(context);
-        if(sPref!.getString("uid") != null && fromCartScreen == "fromCartScreen"){
+        // Navigator.pop(context);
+        print("user id = ${sPref!.getString("uid")}");
+        if (sPref!.getString("uid") != '' && fromCartScreen == "fromCartScreen") {
           _cartProvider.addToCartInFirebaseAfterFirstLogin();
           //Navigator.pushNamed(context, AddressScreen.path);
           Navigator.pop(context);
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> AddressScreen()));
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => CartScreen()));
+        } else {
+          print("I an in sign in user auth screen");
+          Navigator.pop(context);
+          //Navigator.pop(context);
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => UserHomeScreen()));
+         // Navigator.pushNamed(context, UserHomeScreen.path);
         }
-        else{
-          Navigator.pushNamed(context, UserHomeScreen.path);
-        }
-
       } else {
         firebaseAuth.signOut();
         Navigator.pop(context);
@@ -139,7 +142,6 @@ class _AuthScreenState extends State<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("fromCartScreen = $fromCartScreen + VVVVVVVVVVVVVVVVVVVVVvv");
     return Scaffold(
       body: Container(
         // padding: EdgeInsets.only(top: 200),
@@ -240,16 +242,6 @@ class _AuthScreenState extends State<AuthScreen> {
                     const SizedBox(
                       height: 15,
                     ),
-                    // CustomButton(
-                    //   onTap: () {
-                    //     _formValidation();
-                    //   },
-                    //   //icon: Icons.check_outlined,
-                    //   text: "sign in",
-                    //   buttonColor: ColorManager.orange4,
-                    //   boxShadowColorTop: ColorManager.amber2,
-                    //   boxShadowColorDown: ColorManager.blue3,
-                    // ),
                     ElevatedButton(
                       child: const Text(
                         "Sing In",

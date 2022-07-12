@@ -5,7 +5,6 @@ import '../global/color_manager.dart';
 import '../global/global_instance_or_variable.dart';
 import '../models/items_model.dart';
 import '../providers/cart_provider.dart';
-import '../providers/before_add_in_cart_item_counter_provider.dart';
 import '../screens/user_items_details_screen.dart';
 import 'add_and_remove_into_cart_widget.dart';
 import 'decreasing_widget.dart';

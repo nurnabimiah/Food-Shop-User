@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:foodfair/providers/cart_provider.dart';
-import 'package:foodfair/providers/before_add_in_cart_item_counter_provider.dart';
 import 'package:foodfair/providers/user_provider.dart';
 import 'package:foodfair/screens/address_screen.dart';
 import 'package:foodfair/screens/auth_screen.dart';
@@ -47,9 +46,6 @@ Future<void> main() async {
         ChangeNotifierProvider(
           create: (context)=> AddressChangerProvider(),
         ),
-        // ChangeNotifierProvider(
-        //   create: (context)=> BeforeAddInCardItemCounterProvider(),
-        // ),
       ],
       child: MyApp(),
     ),

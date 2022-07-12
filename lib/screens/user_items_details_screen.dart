@@ -12,6 +12,7 @@ import '../widgets/loading_container.dart';
 class UserItemsDetailsScreen extends StatefulWidget {
   final ItemModel? itemModel;
   int? index;
+
   UserItemsDetailsScreen({
     Key? key,
     this.itemModel,
@@ -35,6 +36,11 @@ class _UserItemsDetailsScreenState extends State<UserItemsDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (int.parse(_cartProvider.itemIdAndQuantity[1]) > 1 &&
+        _cartProvider.doubleCheck == 0) {
+      _cartProvider.itemIdAndQuantity[1] = 1.toString();
+      _cartProvider.itemCounter = 1;
+    }
     return Scaffold(
       appBar: MyAppBar(/*sellerUID: widget.itemModel!.sellerUID*/),
       body: ListView(
@@ -81,16 +87,19 @@ class _UserItemsDetailsScreenState extends State<UserItemsDetailsScreen> {
               _cartProvider.isAlreadyIncart(widget.itemModel!.itemID!)
                   ? "${_cartProvider.findQuantityInCartModelWithThisId(widget.itemModel!.itemID!)}"
                   : _cartProvider.itemIdAndQuantity[0] ==
-                  widget.itemModel!.itemID!
-                  ? _cartProvider
-                  .itemIdAndQuantity[1] /*this String*/
-                  :  /*"${_cartProvider.defaultItemQuanity}"*/"1",
+                          widget.itemModel!.itemID!
+                      ? _cartProvider.itemIdAndQuantity[1] /*this String*/
+                      : /*"${_cartProvider.defaultItemQuanity}"*/ "1",
               style: TextStyle(fontSize: 16),
             ),
             //increase widget
-            IncreasingWidget(itemModel: widget.itemModel,),
+            IncreasingWidget(
+              itemModel: widget.itemModel,
+            ),
             //add and remove widget
-            AddandRemoveIntoCartWidget(itemModel: widget.itemModel,),
+            AddandRemoveIntoCartWidget(
+              itemModel: widget.itemModel,
+            ),
           ],
         ),
       ),

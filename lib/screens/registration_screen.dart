@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:foodfair/providers/cart_provider.dart';
 import 'package:foodfair/providers/user_provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +15,7 @@ import '../widgets/loading_dialog.dart';
 import '../global/color_manager.dart';
 import '../global/global_instance_or_variable.dart';
 import '../widgets/container_decoration.dart';
+import 'address_screen.dart';
 import 'user_home_screen.dart';
 
 enum FilterOption {
@@ -44,6 +46,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   bool isLoading = false;
 
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    super.dispose();
+  }
+
   void _showErrorDialog(String message) {
     showDialog(
       context: context,
@@ -62,32 +72,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
-  Future<void> pickedImageFromCamera() async {
-    imageXFile = await _imagePicker.pickImage(source: ImageSource.camera);
-    setState(() {
-      imagePath = File(imageXFile!.path);
-    });
-  }
-
-  Future<void> pickedImageFromGallery() async {
-    imageXFile = await _imagePicker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      imagePath = File(imageXFile!.path);
-    });
-  }
-
-
-
   Future<void> _formvalidationAndSave() async {
-    if (imageXFile == null) {
-      return showDialog(
-          context: context,
-          builder: (context) {
-            return ErrorDialog(
-              message: "Please upload an image",
-            );
-          });
-    }
     final isValid = _formKey.currentState!.validate();
     if (!isValid) {
       return;
@@ -96,9 +81,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     setState(() {
       isLoading = true;
     });
-    uploadProfileImage();
+    // uploadProfileImage();
+    authenticateUserAndSignUp();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -129,7 +114,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       const SizedBox(
                         height: 10,
                       ),
-                      inkWellMethod(),
                       const SizedBox(
                         height: 15,
                       ),
@@ -177,8 +161,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           TextFormField(
             controller: nameController,
             decoration: const InputDecoration(
-              contentPadding: EdgeInsets.symmetric(
-                  horizontal: 2, vertical: 2),
+              contentPadding: EdgeInsets.symmetric(horizontal: 2, vertical: 2),
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(
                     Radius.circular(10),
@@ -206,8 +189,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             controller: emailController,
             keyboardType: TextInputType.emailAddress,
             decoration: const InputDecoration(
-              contentPadding: EdgeInsets.symmetric(
-                  horizontal: 2, vertical: 2),
+              contentPadding: EdgeInsets.symmetric(horizontal: 2, vertical: 2),
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(
                     Radius.circular(10),
@@ -237,8 +219,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             obscureText: true,
             controller: passwordController,
             decoration: const InputDecoration(
-              contentPadding: EdgeInsets.symmetric(
-                  horizontal: 2, vertical: 2),
+              contentPadding: EdgeInsets.symmetric(horizontal: 2, vertical: 2),
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(
                     Radius.circular(10),
@@ -268,8 +249,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             obscureText: true,
             controller: confirmPasswordController,
             decoration: const InputDecoration(
-              contentPadding: EdgeInsets.symmetric(
-                  horizontal: 2, vertical: 2),
+              contentPadding: EdgeInsets.symmetric(horizontal: 2, vertical: 2),
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(
                     Radius.circular(10),
@@ -298,97 +278,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
-  inkWellMethod() {
-    return InkWell(
-      onTap: () {},
-      child: CircleAvatar(
-          radius: MediaQuery.of(context).size.width * 0.20,
-          backgroundColor: Colors.white,
-          backgroundImage: imageXFile == null
-              ? null
-              : FileImage(File(imageXFile!.path)),
-          child: PopupMenuButton(
-            onSelected: (selectedValue) {
-              if (selectedValue == FilterOption.Camera) {
-                setState(() {
-                  pickedImageFromCamera();
-                });
-              } else {
-                setState(() {
-                  pickedImageFromGallery();
-                });
-              }
-            },
-            //icon: Icon(Icons.person),
-            child: imageXFile == null
-                ? Icon(
-              Icons.add_photo_alternate,
-              size: MediaQuery.of(context).size.width *
-                  0.30,
-            )
-                : Visibility(
-              visible: false,
-              maintainSize: true,
-              maintainAnimation: true,
-              maintainState: true,
-              child: Icon(
-                Icons.add_photo_alternate,
-                size:
-                MediaQuery.of(context).size.width *
-                    0.40,
-              ),
-            ),
-            itemBuilder: (value) => [
-              const PopupMenuItem(
-                child: Text("Camera"),
-                value: FilterOption.Camera,
-              ),
-              const PopupMenuItem(
-                child: Text("Gellery"),
-                value: FilterOption.Gallery,
-              )
-            ],
-          )),
-    );
-  }
-
-  Future uploadProfileImage() async {
-    String? imagePathToString = imagePath.toString();
-    var _splitImagePath = imagePathToString.split("/")[6];
-    UploadTask? uploadTask;
-    try {
-      Reference reference =
-      FirebaseStorage.instance.ref().child('/userImage/${_splitImagePath}');
-      uploadTask = reference.putFile(imagePath);
-    } on FirebaseException catch (error) {
-      setState(() {
-        isLoading = false;
-      });
-      _showErrorDialog(error.code);
-    } catch (error) {
-      setState(() {
-        isLoading = false;
-      });
-      var err =
-          "An unknown error occurrred.\n\nplease check internet connection";
-      _showErrorDialog(err);
-    }
-    //TaskSnapshot snapshot = await uploadTask!;
-    TaskSnapshot snapshot = await uploadTask!.whenComplete(() {});
-    //sellerImageUrl = await snapshot.ref.getDownloadURL();
-    await snapshot.ref.getDownloadURL().then((url) {
-      //sellerImageUrl = url;
-      userImageUrl = url;
-      authenticateUserAndSignUp();
-    });
-    //return sellerImageUrl;
-  }
-
   Future authenticateUserAndSignUp() async {
     try {
       //firebaseAuth = thiis variable from global_instance_or_variable file
       UserCredential userCredential =
-      await firebaseAuth.createUserWithEmailAndPassword(
+          await firebaseAuth.createUserWithEmailAndPassword(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
       );
@@ -396,8 +290,20 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         saveDataToFireStore(userCredential.user!).then((value) {
           Navigator.pop(context);
           //send the user to homepage
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => UserHomeScreen()));
+          final _cartProvider =
+              Provider.of<CartProvider>(context, listen: false);
+          if (_cartProvider.cartModelList.isEmpty) {
+            Navigator.pop(context);
+            //Navigator.pop(context);
+            Navigator.pushReplacementNamed(context, UserHomeScreen.path);
+            // Navigator.pushReplacement(context,
+            //     MaterialPageRoute(builder: (context) => UserHomeScreen()));
+          } else {
+            _cartProvider.addToCartInFirebaseAfterFirstLogin();
+            //Navigator.pop(context);
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => AddressScreen()));
+          }
         });
       }
     } on FirebaseAuthException catch (error) {
@@ -423,8 +329,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       userName: nameController.text.trim(),
       userPhotoUrl: userImageUrl,
     );
-    await Provider.of<UserProvider>(context, listen: false).addUser(_userModel, currentUser.uid);
-   // final shData = jsonEncode(_userModel);
+    await Provider.of<UserProvider>(context, listen: false)
+        .addUser(_userModel, currentUser.uid);
+    // final shData = jsonEncode(_userModel);
     //save data locally with sharedPrefernces
     sPref = await SharedPreferences.getInstance();
     //here uid and email come from firebase authectication. because if they are authenticate then
@@ -432,7 +339,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     await sPref!.setString("uid", currentUser.uid);
     await sPref!.setString("email", currentUser.email.toString());
     await sPref!.setString("name", nameController.text.trim());
-    await sPref!.setString("photoUrl", userImageUrl!);
     //await sPref!.setString("userModel", shData);
   }
 }

@@ -59,15 +59,17 @@ class _SaveAddressScreenState extends State<SaveAddressScreen> {
     _completeAddress.text = fullAddress;
   }
 
-  void didChangeDependencies(){
-  _addressProvider = Provider.of<AddressProvider>(context, listen: false);
-  super.didChangeDependencies();
+  void didChangeDependencies() {
+    _addressProvider = Provider.of<AddressProvider>(context, listen: false);
+    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: SimpleAppbar(title: "foodfair",),
+      appBar: SimpleAppbar(
+        title: "foodfair",
+      ),
       floatingActionButton: SizedBox(
         height: MediaQuery.of(context).size.height * 0.05,
         width: MediaQuery.of(context).size.width * 0.30,
@@ -88,10 +90,9 @@ class _SaveAddressScreenState extends State<SaveAddressScreen> {
               _addressProvider.addAddress(addressModel).then((value) {
                 Fluttertoast.showToast(msg: "New Address has been saved.");
                 setState(() {
-                   _formKey.currentState!.reset();
-                   Navigator.pop(context);
+                  _formKey.currentState!.reset();
+                  Navigator.pop(context);
                 });
-               
               });
             }
           },

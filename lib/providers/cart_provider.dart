@@ -89,7 +89,7 @@ class CartProvider with ChangeNotifier {
        }
      }
 
-    if(sPref!.getString("uid") != null){
+    if(firebaseAuth.currentUser != null){
       cartModel2!.quantity = 1;
       itemIdAndQuantity[1] = cartModel2.quantity.toString();
       //itemIdAndQuantity[0] == '-1';
@@ -138,7 +138,8 @@ class CartProvider with ChangeNotifier {
         doubleCheck = 0;
         cartModel = cartModelList[i];
         cartModel.quantity += 1;
-        if(sPref!.getString("uid") != null){
+        if(firebaseAuth.currentUser != null){
+          print("incres ............ = ${sPref!.getString("uid")}");
           DbHelper.updateCartQuantity(cartModel, sPref!.getString("uid")!);
           break;
         }
@@ -163,7 +164,7 @@ class CartProvider with ChangeNotifier {
         doubleCheck = 0;
         //I will not decrease if quantity 1
         cartModel.quantity > 1 ? cartModel.quantity -= 1 : cartModel.quantity;
-        if(sPref!.getString("uid") != null){
+        if(firebaseAuth.currentUser != null){
           DbHelper.updateCartQuantity(cartModel, sPref!.getString("uid")!);
           break;
         }
@@ -201,7 +202,7 @@ class CartProvider with ChangeNotifier {
       itemCounter = 1;
       itemIdAndQuantity[1] = 1.toString();
     }
-    if(sPref!.getString("uid") != null){
+    if(firebaseAuth.currentUser != null){
       DbHelper.removeAllitemsFromCart(sPref!.getString("uid")!, cartModelList).then((value){
         previousSellerId = '';
       });
@@ -217,7 +218,7 @@ class CartProvider with ChangeNotifier {
   String? _itemId;
   String? get getterItemId => _itemId;
   //int get itemCounter => _itemCounter;
-  List<String> itemIdAndQuantity = ["-1","-1"];
+  List<String> itemIdAndQuantity = ["-1","1"];
 
   //decrease items items locally before adding in cart
   void decreaseItemCounterBeforeAddInCart(String itemId){

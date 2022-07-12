@@ -7,6 +7,8 @@ import 'package:foodfair/models/address_model.dart';
 class AddressProvider with ChangeNotifier{
   Stream<QuerySnapshot<Map<String, dynamic>>>? _queryAddress;
   Stream<QuerySnapshot<Map<String, dynamic>>>? get queryAddress => _queryAddress;
+  List<AddressModel> addressModellist = [];
+  int addressNumber = 0;
   //add user address
   Future<void> addAddress(AddressModel addressModel)async {
     DbHelper.addAddress(sPref!.getString("uid")! , addressModel);
@@ -14,14 +16,21 @@ class AddressProvider with ChangeNotifier{
 
   //fetch user all addresses
   Future<void> fetchUserAllAddress()async{
+      DbHelper.fetchUserAllAddress(sPref!.getString("uid")!).listen((event) {
+        // _queryAddress = event.docs.;
+         addressNumber = event.docs.length;
 
-    _queryAddress = await DbHelper.fetchUserAllAddress(sPref!.getString("uid")!);
-    // _queryAddress!.forEach((element) {
-    //   print("object #= ${element.docs[0].id}  ");
-    //   print("object #= ${element.docs[1].id}  ");
-    //   print("object #= ${element.docs[2].id}  ");
-    // });
-    //print("...........queryAdd = ${_queryAddress!.doc[0].toString()}");
-    notifyListeners();
+        addressModellist = List.generate(event.docs.length, (index) => AddressModel.fromMap(event.docs[index].data()));
+        notifyListeners();
+    }); //.then((value){
+      //_queryAddress = value;
+      // Stream<QuerySnapshot<Map<String, dynamic>>> _queryAddress2 = _queryAddress!;
+      // notifyListeners();
+      // _queryAddress2.forEach((element) {
+      //   addressNumber = element.docs.length;
+       // notifyListeners();
+      //});
+   // });
   }
+  notifyListeners();
 }

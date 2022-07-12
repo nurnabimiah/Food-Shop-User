@@ -165,7 +165,7 @@ class DbHelper {
     }
   }
   //fetch use all addresses
-  static Future<Stream<QuerySnapshot<Map<String, dynamic>>>> fetchUserAllAddress(String userId)async{
+  static /*Future<*/Stream<QuerySnapshot<Map<String, dynamic>>>/*>*/ fetchUserAllAddress(String userId){
     Stream<QuerySnapshot<Map<String, dynamic>>>? queryData;
     try{
       queryData = _db.collection("users").doc(userId).collection("userAddress").snapshots();

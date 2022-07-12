@@ -24,7 +24,11 @@ class _MyDrawerState extends State<MyDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    print("object = ${sPref!.getString("photoUrl")}");
+    String? firstLetterOfname;
+    if(sPref!.getString("name") != ''){
+      firstLetterOfname = sPref!.getString("name")!;
+      firstLetterOfname = firstLetterOfname[0].toUpperCase();
+    }
     size = MediaQuery.of(context).size.height;
     return Drawer(
       child: ListView(
@@ -34,26 +38,24 @@ class _MyDrawerState extends State<MyDrawer> {
             color: ColorManager.amber1,
             child: Column(
               children: [
-                sPref!.getString("photoUrl") == null
-                    ? Text('')
-                    : Material(
-                        borderRadius: BorderRadius.all(Radius.circular(80)),
-                        elevation: 10,
-                        child: Container(
-                          width: size! * 0.2,
-                          height: size! * 0.2,
-                          // height: 160,
-                          // width: 160,
-                          child: CircleAvatar(
-                            backgroundImage:
-                                NetworkImage("${sPref!.getString("photoUrl")}"),
-                          ),
-                        ),
-                      ),
+                sPref!.getString("name") == '' ? Text('') : Material(
+                  borderRadius: BorderRadius.all(Radius.circular(80)),
+                  elevation: 10,
+                  child: Container(
+                    width: size! * 0.08,
+                    height: size! * 0.08,
+                    // height: 160,
+                    // width: 160,
+                    child: CircleAvatar(
+                      child: Text("$firstLetterOfname"),
+                    ),
+                  ),
+                ),
+
                 const SizedBox(
                   height: 10,
                 ),
-                sPref!.getString("name") == null
+                sPref!.getString("name") == ''
                     ? Text('')
                     : Text(
                         "${sPref!.getString("name")}",
@@ -62,8 +64,10 @@ class _MyDrawerState extends State<MyDrawer> {
                 const SizedBox(
                   height: 10,
                 ),
-                sPref!.getString("email") == null
-                    ? Text('')
+                sPref!.getString("email") == ''
+                    ? TextButton(onPressed: (){
+                      Navigator.pushNamed(context, AuthScreen.path);
+                }, child: Text('Log in/ Create account', style: TextStyle(fontSize: 18),))
                     : Text(
                         "${sPref!.getString("email")}",
                         style: TextStyle(color: Colors.black, fontSize: 17),
@@ -83,8 +87,7 @@ class _MyDrawerState extends State<MyDrawer> {
               style: TextStyle(color: Colors.black),
             ),
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => UserHomeScreen()));
+              Navigator.pop(context);
             },
           ),
           const Divider(thickness: 1),
@@ -95,8 +98,8 @@ class _MyDrawerState extends State<MyDrawer> {
               style: TextStyle(color: Colors.black),
             ),
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => MyOrderSceen()));
+              // Navigator.push(context,
+              //     MaterialPageRoute(builder: (context) => MyOrderSceen()));
             },
           ),
           const Divider(thickness: 1),
@@ -136,28 +139,15 @@ class _MyDrawerState extends State<MyDrawer> {
             onTap: () async {
               firebaseAuth.signOut().then((value) async {
                 sPref!.setString("uid", '');
-                await sPref!.setString("photoUrl", '');
                 await sPref!.setString("name", '');
                 await sPref!.setString("email", '');
 
-                // await sPref!.setString("uid", currentUser.uid);
-                // await sPref!.setString("email", currentUser.email.toString());
-                // await sPref!.setString("name", nameController.text.trim());
-                // await sPref!.setString("photoUrl", userImageUrl!);
-                print("loagut ");
-
                 _cartProvider.cartModelList.clear();
                 _cartProvider.clearCart().then((value) {
-                  print("loagut 2");
-                  print(
-                      "carlist.lengt = ${_cartProvider.cartModelList.length}");
-                  Navigator.pushNamed(context, UserHomeScreen.path);
-
-                  //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> UserHomeScreen()));
+                  //Navigator.pop(context);//some times it will works
+                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => UserHomeScreen(),), (route) => false);
+                  //Navigator.of(context).popUntil(ModalRoute.withName("/home")); //this also works
                 });
-
-                // Navigator.pushReplacement(context, MaterialPageRoute(
-                //     builder: (context) => AuthScreen()));
               });
             },
           ),

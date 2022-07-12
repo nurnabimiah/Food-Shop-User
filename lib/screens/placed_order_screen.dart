@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:foodfair/global/add_item_to_cart.dart';
 import 'package:foodfair/models/order_model.dart';
-import 'package:foodfair/providers/before_add_in_cart_item_counter_provider.dart';
 import 'package:foodfair/screens/user_home_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:foodfair/providers/order_provider.dart';
@@ -95,9 +94,9 @@ class _PlacedOrderScreenState extends State<PlacedOrderScreen> {
                         .addOrder(_orderModel, _cartProvider.cartModelList).then((value){
                         _cartProvider.clearCart();
                         previousSellerId = '';
-                        _cartProvider.itemIdAndQuantity = ['-1', '-1'];
+                        _cartProvider.itemIdAndQuantity = ['-1', '1'];
                          // orderId = '';
-                          Navigator.pushNamed(context, UserHomeScreen.path);
+                         // Navigator.pushNamed(context, UserHomeScreen.path);
                           Fluttertoast.showToast(
                               msg: "Congratulations, Order has been placed successfully.");
                     });

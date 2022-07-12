@@ -26,9 +26,10 @@ class AddressWidget extends StatefulWidget {
 }
 
 class _AddressWidgetState extends State<AddressWidget> {
+
   @override
   Widget build(BuildContext context) {
-    // final provider = Provider.of<SellerProvider>(context);
+   print("index widget = ${widget.index}");
     return InkWell(
       onTap: () {
         //select this address

@@ -19,19 +19,26 @@ class _AddressScreenState extends State<AddressScreen> {
   late AddressProvider _addressProvider;
   late AddressChangerProvider _addressChangerProvider;
   bool _init = true;
-  void didChangeDependencies()async{
+  bool _isLoading = true;
+
+  void didChangeDependencies() async {
     _addressProvider = Provider.of<AddressProvider>(context);
-    _addressChangerProvider = Provider.of<AddressChangerProvider>(context, listen: false);
-    if(_init){
-      await _addressProvider.fetchUserAllAddress();
+    _addressChangerProvider = Provider.of<AddressChangerProvider>(context);
+    if (_init) {
+      // _addressChangerProvider.getRadioButtonIndex(0);
+      await _addressProvider.fetchUserAllAddress().then((value) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
     }
     _init = false;
     super.didChangeDependencies();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //appBar: SimpleAppbar(title: "foodfair",),
       appBar: AppBar(
         title: Text("foodfair"),
         centerTitle: true,
@@ -55,51 +62,49 @@ class _AddressScreenState extends State<AddressScreen> {
           ),
         ),
       ),
-      body: Column(
-        children: [
-          const Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: EdgeInsets.all(10.0),
-              child: Text(
-                "Select Address",
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
-              ),
+      body: _isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : Column(
+              children: [
+                _addressProvider.addressNumber == 0
+                    ? Text('')
+                    : const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: Text(
+                            "Select Address",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                Flexible(
+                  child: ListView.builder(
+                      // itemCount: snapshot.data!.docs.length,
+                      itemCount: _addressProvider.addressModellist.length,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        print("indxe screen = $index");
+                        // AddressModel? addressModel = AddressModel.fromMap(
+                        //   snapshot.data!.docs[index].data()!
+                        //   as Map<String, dynamic>,
+                        // );
+                        return AddressWidget(
+                          currentAddressIndex:
+                              _addressChangerProvider.radioButtonIndex,
+                          index: index,
+                          addressModel:
+                              _addressProvider.addressModellist[index],
+                        );
+                      }),
+                ),
+              ],
             ),
-          ),
-           Flexible(
-              child: StreamBuilder(
-                stream: _addressProvider.queryAddress,
-                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-
-                  return !snapshot.hasData
-                      ? const Center(
-                          child: CircularProgressIndicator(),
-                        )
-                      : ListView.builder(
-                              itemCount: snapshot.data!.docs.length,
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) {
-                                AddressModel? addressModel = AddressModel.fromMap(
-                                  snapshot.data!.docs[index].data()!
-                                      as Map<String, dynamic>,
-                                );
-                                return AddressWidget(
-                                   currentAddressIndex: _addressChangerProvider.radioButtonIndex,
-                                   index: index,
-                                  // addressID: snapshot.data!.docs[index].id,
-                                  // totalAmount: tAmount.totalAmount,
-                                  addressModel: addressModel,
-                                );
-                              });
-                },
-              ),
-            ),
-        ],
-      ),
     );
   }
 }
