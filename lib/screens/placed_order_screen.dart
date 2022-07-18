@@ -73,7 +73,7 @@ class _PlacedOrderScreenState extends State<PlacedOrderScreen> {
                     final _orderModel = OrderModel(
                       addressID: widget.addressID,
                       totalAmount: _cartProvider.cartItemsTotalPrice,
-                      orderBy: sPref!.getString("uid"),
+                      userId: sPref!.getString("uid"),
                       paymentMethod: '',
                       orderTime: timestamp.toIso8601String(),
                       isSuccess: true,
@@ -95,8 +95,8 @@ class _PlacedOrderScreenState extends State<PlacedOrderScreen> {
                         _cartProvider.clearCart();
                         previousSellerId = '';
                         _cartProvider.itemIdAndQuantity = ['-1', '1'];
-                         // orderId = '';
-                         // Navigator.pushNamed(context, UserHomeScreen.path);
+                          //Navigator.pushNamed(context, UserHomeScreen.path);
+                          //Navigator.popUntil(context, ModalRoute.withName("/home"));
                           Fluttertoast.showToast(
                               msg: "Congratulations, Order has been placed successfully.");
                     });

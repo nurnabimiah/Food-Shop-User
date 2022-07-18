@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:foodfair/models/cart_model.dart';
 import 'package:foodfair/models/items_model.dart';
 import 'package:foodfair/models/order_model.dart';
 import 'package:provider/provider.dart';
@@ -12,14 +13,13 @@ class MyOrderWidget extends StatefulWidget {
   List<DocumentSnapshot>? data;
   int? itemCount;
   String? orderId;
-  List<String>? itemQuantityList;
+
 
   MyOrderWidget({
     Key? key,
     this.data,
     this.itemCount,
     this.orderId,
-    this.itemQuantityList,
   }) : super(key: key);
 
   @override
@@ -33,9 +33,7 @@ class _MyOrderWidgetState extends State<MyOrderWidget> {
 
   @override
   Widget build(BuildContext context){
-    print("object1");
     // print("items length = ${_orderProvider.itemModelList.length} of orderId = ${widget.orderModel!.orderId}");
-    print("");
     return InkWell(
       onTap: (){
         Navigator.push(context, MaterialPageRoute(builder: (context)=>OrderDetailScreen(orderID: widget.orderId)));
@@ -52,11 +50,11 @@ class _MyOrderWidgetState extends State<MyOrderWidget> {
             itemCount: widget.itemCount,
             physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index){
-              ItemModel itemModel = ItemModel.fromMap(widget.data![index].data()! as Map<String, dynamic>);
+              CartModel cartModel = CartModel.fromMap(widget.data![index].data()! as Map<String, dynamic>);
               for(int i=0; i<widget.data!.length; i++){
                 print("itemId = ${widget.data![i].id}");
               }
-              return PlacedOrderDesignWidtet(itemModel, context, widget.itemQuantityList![index]);
+              return PlacedOrderDesignWidtet(cartModel, context, cartModel.quantity);
             }),
       ),
     );
@@ -65,18 +63,18 @@ class _MyOrderWidgetState extends State<MyOrderWidget> {
 }
 
 Widget PlacedOrderDesignWidtet(
-    ItemModel itemModel, BuildContext context, separateItemsQuantityList) {
+    CartModel cartModel, BuildContext context, quantity) {
   // print("6 + separateItemsQuantityList = + ${separateItemsQuantityList} + XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxxxxxxxx");
   return Container(
     width: MediaQuery.of(context).size.width,
     height: 120,
     child: Row(
       children: [
-        /*CachedNetworkImage(
-          imageUrl: itemModel.itemImageUrl!,
+        CachedNetworkImage(
+          imageUrl: cartModel.itemImageUrl!,
           width: 120,
-        ),*/
-        Text("${itemModel.itemID}"),
+        ),
+       // Text("${cartModel.itemID}"),
         SizedBox(
           width: 10,
         ),
@@ -92,7 +90,7 @@ Widget PlacedOrderDesignWidtet(
                 children: [
                   Expanded(
                     child: Text(
-                      itemModel.itemTitle!,
+                      cartModel.itemTitle!,
                       style: const TextStyle(
                         color: Colors.black,
                         fontSize: 16,
@@ -105,7 +103,7 @@ Widget PlacedOrderDesignWidtet(
                   Padding(
                     padding: const EdgeInsets.only(right: 5),
                     child: Text(
-                      "Tk ${itemModel.price}",
+                      "Tk ${cartModel.price}",
                       style: const TextStyle(
                         color: Colors.black,
                         fontSize: 16,
@@ -121,7 +119,7 @@ Widget PlacedOrderDesignWidtet(
                 children: [
                   Expanded(
                     child: Text(
-                      "x $separateItemsQuantityList",
+                      "x $quantity",
                       style: const TextStyle(
                         color: Colors.black,
                         fontSize: 16,

@@ -11,19 +11,12 @@ import '../models/order_constants_model.dart';
 
 class OrderProvider with ChangeNotifier {
   Stream<QuerySnapshot<Map<String, dynamic>>>? _ordersData;
-  Future<QuerySnapshot<Map<String, dynamic>>>? _itemsData;
+  Stream<QuerySnapshot<Map<String, dynamic>>>? _itemsData;
   Stream<QuerySnapshot<Map<String, dynamic>>>? get ordersData => _ordersData;
-  Future<QuerySnapshot<Map<String, dynamic>>>? get itemsData=> _itemsData;
-  List<ItemModel> itemModelList =  [];
-  // List<ItemModel> get itemModelList => _itemModelList;
-  // List<ItemModel> get itemModelList {
-  //   //print('object2');
-  //   return _itemModelList;
-  // }
+  Stream<QuerySnapshot<Map<String, dynamic>>>? get itemsData => _itemsData;
 
   OrderConstantsModel orderConstantsModel = OrderConstantsModel();
   List<OrderModel> userOrderList = [];
-  //List<CartModel> orderDetailsList = [];
 
   void getOrderConstants() async {
     DbHelper.fetchOrderConstants().listen((snapshot) {
@@ -41,14 +34,14 @@ class OrderProvider with ChangeNotifier {
 
   //fetch orders for specific user
   Future<void> fetchOrders() async {
-    _ordersData = await DbHelper.fetchOrders();
+    _ordersData = await DbHelper.fetchOrders(sPref!.getString("uid")!);
     notifyListeners();
   }
 
-//fetch items those are ordered from a specific user
-// Future<QuerySnapshot<Map<String, dynamic>>> fetchOrderedItems(
-//     OrderModel orderModel)async {
-//   return  DbHelper.fetchOrderedItems(orderModel);
-// }
+  //fetch a specific user's orderDetails
+ Stream<QuerySnapshot<Map<String, dynamic>>> fetchItemsOfOrderDetails(String orderId) {
+      _itemsData =  DbHelper.fetchItemsOfOrderDetails(orderId, sPref!.getString("uid")!);
+      return _itemsData!;
+  }
 
 }

@@ -1,7 +1,7 @@
 class OrderModel{
   String? addressID;
   num? totalAmount;
-  String? orderBy;
+  String? userId;
   String? paymentMethod;
   String? orderTime;
   bool isSuccess =  true;
@@ -17,7 +17,7 @@ class OrderModel{
   OrderModel({
       this.addressID,
       this.totalAmount,
-      this.orderBy,
+      this.userId,
       this.paymentMethod,
       this.orderTime,
       required this.isSuccess,
@@ -34,7 +34,7 @@ class OrderModel{
       "orderId": orderId,
       "addressID": addressID,
       "totalAmount": totalAmount,
-      "orderBy": orderBy,
+      "userId": userId,
       "paymentMethod": paymentMethod,
       "orderTime": orderTime,
       "isSuccess": isSuccess,
@@ -51,7 +51,7 @@ class OrderModel{
   factory OrderModel.fromMap(Map<String, dynamic> map) => OrderModel(
     addressID: map['addressID'],
     totalAmount: map['totalAmount'],
-    orderBy: map['orderBy'],
+    userId: map['userId'],
     paymentMethod: map['paymentMethod'],
     orderTime: map['orderTime'],
     isSuccess: map['isSuccess'],

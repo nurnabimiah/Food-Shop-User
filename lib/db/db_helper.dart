@@ -1,8 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:foodfair/models/address_model.dart';
-
-import '../global/add_item_to_cart.dart';
-import '../global/global_instance_or_variable.dart';
 import '../models/cart_model.dart';
 import '../models/order_model.dart';
 import '../models/user_model.dart';
@@ -175,21 +172,6 @@ class DbHelper {
     }
   }
 
-  // //add order
-  // static Future<void> addOrder(OrderModel orderModel, String orderId) async {
-  //   await _db
-  //       .collection("users")
-  //       .doc(sPref!.getString("uid"))
-  //       .collection("orders")
-  //       .doc(orderId)
-  //       .set(orderModel.toMap());
-  //
-  //   await FirebaseFirestore.instance
-  //       .collection("orders")
-  //       .doc(orderId)
-  //       .set(orderModel.toMap());
-  //   return;
-  // }
   
   //add order
   static Future<void> addOrder(OrderModel orderModel, List<CartModel> cartList) {
@@ -209,15 +191,14 @@ class DbHelper {
   }
 
   //fetch specific user's orders
-  static Future<Stream<QuerySnapshot<Map<String, dynamic>>>>?
-      fetchOrders() async {
+  static Stream<QuerySnapshot<Map<String, dynamic>>>?
+      fetchOrders(String userId)  {
     Stream<QuerySnapshot<Map<String, dynamic>>>? queryData;
     try {
       //here we get the order list of order collection which are normal
       queryData = _db
-          .collection("users")
-          .doc(sPref!.getString("uid"))
           .collection("orders")
+          .where("userId", isEqualTo: userId)
           .where("status", isEqualTo: "normal")
           .orderBy("orderTime", descending: true)
           .snapshots();
@@ -227,30 +208,18 @@ class DbHelper {
     }
   }
 
-// //fetch items those are ordered from a specific user
-// static Future<QuerySnapshot<Map<String, dynamic>>> fetchOrderedItems(OrderModel orderModel) async {
-//   QuerySnapshot<Map<String, dynamic>> queryData;
-//   List<String> itemList = separatedItemIDFromOrdersCollection(orderModel.productIDs);
-//   for(int i=0; i<itemList.length; i++){
-//     print("itemId in db = ${itemList[i]}");
-//   }
-//   print('');
-//   try {
-//     queryData = await _db
-//         .collection(
-//             "items") /*insdie of items colleciton we will search which items are ordered.*/
-//         .where("itemID",
-//             /*if itemID is exist in separateOrdersItemsIDs*/
-//             whereIn: itemList).
-//         get();
-//     print('dfd');
-//         for(int i = 0; i< queryData.docs.length; i++){
-//           print("after itemId = ${queryData.docs[i].id}");
-//         }
-//         print('');
-//     return queryData;
-//   } catch (error) {
-//     throw "error";
-//   }
-// }
+  //fetch specific user's all Items Of OrderDetails
+  static /*Future<*/Stream<QuerySnapshot<Map<String, dynamic>>>/*>*/?
+  fetchItemsOfOrderDetails(String orderId, String userId){
+    Stream<QuerySnapshot<Map<String, dynamic>>>? queryData;
+    try {
+      //here we get the order list of order collection which are normal
+      queryData = _db
+          .collection("orders").doc(orderId).collection("orderDetails")
+          .snapshots();
+      return queryData;
+    } catch (error) {
+      throw "error";
+    }
+  }
 }

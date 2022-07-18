@@ -21,89 +21,89 @@ class MyOrderSceen extends StatefulWidget {
 class _MyOrderSceenState extends State<MyOrderSceen> {
   late OrderProvider _orderProvider;
   bool _init = true;
+  bool _isLoading = true;
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   if (_init) {
-  //     _orderProvider = Provider.of<OrderProvider>(context, listen: false);
-  //     _orderProvider.fetchOrders().then((value) {
-  //       setState(() {
-  //         //print("10 + ordermodel = + + BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBbbbb");
-  //         _init = false;
-  //       });
-  //     });
-  //   }
-  // }
+  @override
+  void initState() {
+    super.initState();
+    if (_init) {
+      _orderProvider = Provider.of<OrderProvider>(context, listen: false);
+      _orderProvider.fetchOrders().then((value) {
+        // print(
+        //     "orderId in myorderScreen = +   ....id}");
+        setState(() {
+          _isLoading = false;
+        });
+      });
+      _init = false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    print('');
     return SafeArea(
       child: Scaffold(
         appBar: SimpleAppbar(title: "My orders"),
-        body: StreamBuilder<QuerySnapshot>(
-                //here we get the order list of order collection which are normal
-               // stream: _orderProvider.ordersData,
-                stream: FirebaseFirestore.instance
-                    .collection("users")
-                    .doc(sPref!.getString("uid"))
-                    .collection("orders")
-                    .where("status", isEqualTo: "normal")
-                    .orderBy("orderTime", descending: true)
-                    .snapshots(),
-                builder: (c, snapshot) {
-                  return snapshot.hasData
-                      ? ListView.builder(
-                          itemCount: snapshot.data!.docs.length,
-                          itemBuilder: (context, index) {
+        body:  _isLoading ? Center(child: CircularProgressIndicator(),) : StreamBuilder<QuerySnapshot>(
+          //here we get the order list of order collection which are normal
+          stream: _orderProvider.ordersData,
+          builder: (c, snapshot) {
+            return snapshot.hasData
+                ? ListView.builder(
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      print(
+                          "orderId in myorderScreen = +1   ....id}");
+                      print(
+                          "orderId in myorderScreen = + ${snapshot.data!.docs[index].id}");
+                      OrderModel orderModel = OrderModel.fromMap(
+                          snapshot.data!.docs[index].data()
+                              as Map<String, dynamic>);
 
+                      print('');
+                      //inside of specific orderId have many itemQuantity
+                      return StreamBuilder<QuerySnapshot>(
+                          // future: _orderProvider.fetchOrderedItems(orderModel),
+                          //future: _orderProvider.fetchOrderedItems(orderModel),
+                          // future: FirebaseFirestore.instance
+                          //     .collection(
+                          //         "items") /*insdie of items colleciton we will search which items are ordered.*/
+                          //     /*.where("itemID",
+                          //         /*if itemID is exist in separateOrdersItemsIDs*/
+                          //         whereIn: itemList/*separatedItemIDFromOrdersCollection(
+                          //             (snapshot.data!.docs[index].data()!
+                          //             as Map<String, dynamic>)["productIDs"])*/)*/
+                          //     .get(),
+                          stream: _orderProvider.fetchItemsOfOrderDetails(orderModel.orderId!),
+                          builder: (context, snap) {
                             print(
-                                "orderId in myorderScreen = + ${snapshot.data!.docs[index].id}");
-                            OrderModel orderModel = OrderModel.fromMap(
-                                snapshot.data!.docs[index].data()
-                                    as Map<String, dynamic>);
-                            // List<String> itemList = separatedItemIDFromOrdersCollection(orderModel.productIDs);
-                            // for(int i=0; i<itemList.length; i++){
-                            //   print("itemId_1 in orscreen = ${itemList[i]}");
-                            // }
-                            print('');
-                            //inside of specific orderId have many itemQuantity
-                            return FutureBuilder<QuerySnapshot>(
-                                // future: _orderProvider.fetchOrderedItems(orderModel),
-                                //future: _orderProvider.fetchOrderedItems(orderModel),
-                              future: FirebaseFirestore.instance
-                                  .collection(
-                                  "items") /*insdie of items colleciton we will search which items are ordered.*/
-                                  /*.where("itemID",
-                                  /*if itemID is exist in separateOrdersItemsIDs*/
-                                  whereIn: itemList/*separatedItemIDFromOrdersCollection(
-                                      (snapshot.data!.docs[index].data()!
-                                      as Map<String, dynamic>)["productIDs"])*/)*/
-                                  .get(),
-                                builder: (context, snap) {
-                                    if(!snap.hasData){
-                                      return Text('');
-                                    }
-                                  for(int i=0; i<snap.data!.docs.length; i++){
-                                    print("itemId_2 in orscreen = ${snap.data!.docs[i].id} + orderId = ${orderModel.orderId}");
-                                  }
-                                  return !snap.hasData ? Center(child: CircularProgressIndicator()) : MyOrderWidget(
+                                "orderId in myorderScreen = +   ....id}");
+                            if (!snap.hasData) {
+                              return Text('');
+                            }
+                            for (int i = 0; i < snap.data!.docs.length; i++) {
+                              print(
+                                  "itemId_2 in orscreen = ${snap.data!.docs[i].id} + orderId = ${orderModel.orderId}");
+                            }
+                            return !snap.hasData
+                                ? Center(child: CircularProgressIndicator())
+                                : MyOrderWidget(
                                     data: snap.data!.docs,
                                     itemCount: snap.data!.docs.length,
                                     orderId: orderModel.orderId,
-                                    itemQuantityList : separateItemQuantityFromOrdersCollection(
-                                  (snapshot.data!.docs[index].data()!
-                                  as Map<String, dynamic>)[
-                                  "productIDs"]),
+                                    // itemQuantityList:
+                                    //     separateItemQuantityFromOrdersCollection(
+                                    //         (snapshot.data!.docs[index].data()!
+                                    //                 as Map<String, dynamic>)[
+                                    //             "productIDs"]),
                                   );
-                                });
-                          })
-                      : Center(
-                          child: circularProgress(),
-                        );
-                },
-              ),
+                          });
+                    })
+                : Center(
+                    child: circularProgress(),
+                  );
+          },
+        ),
       ),
     );
   }
