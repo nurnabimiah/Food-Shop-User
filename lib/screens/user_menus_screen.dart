@@ -59,14 +59,18 @@ class _UserMenusScreenState extends State<UserMenusScreen> {
     return Scaffold(
       backgroundColor: ColorManager.lightPink,
       appBar: AppBar(
+        elevation: 0,
         title: Text("foods"),
         centerTitle: true,
         //automaticallyImplyLeading: false,
-        flexibleSpace: Container(
-          decoration: const ContainerDecoration().decoaration(),
-        ),
+
       ),
-      //drawer: MyDrawer(),
+
+
+
+
+
+
       body: _isLoading == true
           ? Center(
               child: CircularProgressIndicator(),

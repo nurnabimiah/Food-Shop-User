@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodfair/widgets/cart_widget.dart';
 import 'package:foodfair/widgets/text_widget_header.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import '../global/color_manager.dart';
 import '../global/global_instance_or_variable.dart';
@@ -32,11 +33,14 @@ class _CartScreenState extends State<CartScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("foods"),
+          elevation: 0,
+          title: const Text("Food shop"),
           centerTitle: true,
           //automaticallyImplyLeading: false,
           flexibleSpace: Container(
-            decoration: const ContainerDecoration().decoaration(),
+            decoration:BoxDecoration(
+             //color: Colors.red
+            ),
           ),
           actions: [
             Stack(
@@ -61,15 +65,10 @@ class _CartScreenState extends State<CartScreen> {
             ? null
             : floatingActionButtonMethod(),
         body: _cartProvider.cartModelList.isEmpty
-            ? const Center(
-                child: Text(
-                  "Not yet added in cart",
-                  style: TextStyle(
-                      fontSize: 24,
-                      color: Colors.redAccent,
-                      fontWeight: FontWeight.bold),
-                ),
-              )
+            ?  Center(
+            child: Text('No cart is Added',style: TextStyle(fontSize: 20,color: Colors.red),),
+        )
+
             : customScrollViewMetho());
   }
 
@@ -132,7 +131,7 @@ class _CartScreenState extends State<CartScreen> {
                     fontSize: 16,
                   ),
                 ),
-                backgroundColor: ColorManager.purple2,
+                backgroundColor: Colors.red,
                 icon: const Icon(Icons.clear_all),
               ),
             ),
@@ -161,7 +160,7 @@ class _CartScreenState extends State<CartScreen> {
                   fontSize: 16,
                 ),
               ),
-              backgroundColor: ColorManager.purple2,
+              backgroundColor: Colors.red,
               icon: const Icon(Icons.navigate_next),
             ),
           ),

@@ -7,6 +7,8 @@ import 'package:foodfair/screens/cart_screen.dart';
 import 'package:foodfair/screens/user_items_details_screen.dart';
 import 'package:foodfair/screens/user_items_screen.dart';
 import 'package:foodfair/widgets/add_and_remove_into_cart_widget.dart';
+import 'package:foodfair/widgets/app_input_decoration/app_input_decoration.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import '../../widgets/error_dialog.dart';
 import '../../widgets/loading_dialog.dart';
@@ -143,154 +145,107 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        // padding: EdgeInsets.only(top: 200),
-        //height: MediaQuery.of(context).size.height,
-        decoration: const ContainerDecoration().decoaration(),
-        child: Padding(
-          padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+      body: Padding(
+        padding:  EdgeInsets.only(left: 16.0,right: 16,top: 200,bottom: 100),
+        child: SingleChildScrollView(
           child: Column(
-            mainAxisSize: MainAxisSize.max,
+
             children: [
-              Expanded(
-                flex: 1,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 30, right: 20, left: 20),
-                  child: Image.asset(
-                    "assets/images/welcome.png",
-                    //scale: 2,
-                    //height: MediaQuery.of(context).size.height * 0.30,
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 2,
+              Form(
+                key: _formKey,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Form(
-                      key: _formKey,
-                      child: Column(
-                        children: [
-                          TextFormField(
-                            controller: emailController,
-                            keyboardType: TextInputType.emailAddress,
-                            decoration: const InputDecoration(
-                              //isCollapsed: true,
-                              // isDense: true,
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 2, vertical: 2),
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(10),
-                                  ),
-                                  borderSide: BorderSide.none),
-                              prefixIcon: Icon(
-                                Icons.email,
-                                color: Colors.cyan,
-                              ),
-                              filled: true,
-                              fillColor: Colors.white,
-                              hintText: "email",
-                            ),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return "Please enter an email";
-                              } else if (!value.contains('@')) {
-                                return "Invalid email";
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          TextFormField(
-                            controller: passwordController,
-                            obscureText: true,
-                            decoration: const InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 2, vertical: 2),
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(10),
-                                  ),
-                                  borderSide: BorderSide.none),
-                              prefixIcon: Icon(
-                                Icons.lock,
-                                color: Colors.cyan,
-                              ),
-                              filled: true,
-                              fillColor: Colors.white,
-                              hintText: "password",
-                            ),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return "Please enter password";
-                              } else if (value.length < 6) {
-                                return "password must be at least 6 characters";
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                        ],
-                      ),
+                    //Lottie.asset('assets/animations/132642-fast-food.json',fit: BoxFit.fitWidth),
+                    Text('Food Shop',style: TextStyle(fontSize: 32,color: Colors.red,fontWeight: FontWeight.w600),),
+
+                    SizedBox(height: 30,),
+
+                    TextFormField(
+                      controller: emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: appInputDecoration('Email',Icon(Icons.email,color: Colors.white,)),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Please enter an email";
+                        } else if (!value.contains('@')) {
+                          return "Invalid email";
+                        }
+                        return null;
+                      },
                     ),
+
+
+
                     const SizedBox(
                       height: 15,
                     ),
-                    ElevatedButton(
-                      child: const Text(
-                        "Sing In",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.purple[300],
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 50, vertical: 10),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          side: BorderSide(color: ColorManager.depOrange1),
-                        ),
-                      ),
-                      onPressed: () {
-                        _formValidation();
+
+                    TextFormField(
+                      controller: passwordController,
+                      obscureText: true,
+                      decoration: appInputDecoration('Password',Icon(Icons.lock,color: Colors.white,)),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Please enter password";
+                        } else if (value.length < 6) {
+                          return "password must be at least 6 characters";
+                        }
+                        return null;
                       },
                     ),
-                    ElevatedButton(
-                      child: const Text(
-                        "Sing Up",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.purple[300],
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 50, vertical: 10),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          side: BorderSide(color: ColorManager.depOrange1),
-                        ),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const RegistrationScreen()),
-                        );
-                      },
+
+
+
+                    const SizedBox(
+                      height: 30,
                     ),
+
+                    SizedBox(
+                      width: 150,
+                      child: ElevatedButton(
+                        child: const Text(
+                          "Sing In",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                           backgroundColor: Colors.red,
+
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            side: BorderSide(color: ColorManager.depOrange1),
+                          ),
+                        ),
+                        onPressed: () {
+                          _formValidation();
+                        },
+                      ),
+                    ),
+
                   ],
                 ),
               ),
+
+
+
+              SizedBox(height: 100,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Not yet to account ?'),
+                  TextButton(onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=> RegistrationScreen()));
+                  }, child: Text('Sign Up',style: TextStyle(fontWeight: FontWeight.w700,fontSize: 20,color: Colors.red),))
+                ],
+              )
+
+
+
+
+
             ],
           ),
         ),

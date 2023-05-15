@@ -18,11 +18,12 @@ class TextWidgetHeader extends SliverPersistentHeaderDelegate {
         width: double.infinity,
         height: MediaQuery.of(context).size.height * 0.10,
         alignment: Alignment.center,
-        decoration: ContainerDecoration().decoaration(),
+        decoration: BoxDecoration(color:Colors.red),
         child: InkWell(
           child: Text(
             title!,
             maxLines: 2,
+            style: TextStyle(fontSize: 18,fontWeight: FontWeight.w600,color: Colors.white),
           ),
         ),
       ),

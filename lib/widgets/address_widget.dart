@@ -68,6 +68,8 @@ class _AddressWidgetState extends State<AddressWidget> {
                               Text(widget.addressModel!.name.toString()),
                             ],
                           ),
+
+
                           TableRow(
                             children: [
                               const Text(
@@ -140,7 +142,7 @@ class _AddressWidgetState extends State<AddressWidget> {
                 "Check on Maps",
               ),
               style: ElevatedButton.styleFrom(
-                primary: Colors.purple[300],
+                backgroundColor: Colors.red,
                 padding:
                 const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 shape: RoundedRectangleBorder(
@@ -152,9 +154,7 @@ class _AddressWidgetState extends State<AddressWidget> {
             widget.index == Provider.of<AddressChangerProvider>(context).radioButtonIndex
                 ? ElevatedButton(
               onPressed: () {
-                //Navigator.pushNamed(context, PlacedOrderScreen.path, arguments: widget.addressID);
-                // String? sellerUid =  Provider.of<SellerProvider>(context, listen: false)
-                //   .sellerUID;
+
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -166,7 +166,7 @@ class _AddressWidgetState extends State<AddressWidget> {
                 "Proceed",
               ),
               style: ElevatedButton.styleFrom(
-                primary: Colors.purple[300],
+                backgroundColor: Colors.red,
                 padding: const EdgeInsets.symmetric(
                     horizontal: 43, vertical: 10),
                 shape: RoundedRectangleBorder(

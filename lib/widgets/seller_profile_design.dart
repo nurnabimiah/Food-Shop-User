@@ -65,28 +65,7 @@ class _SellerProfileDesignState extends State<SellerProfileDesign> {
                               child: Text(
                             "Image not found", /*style: TextStyle(height: ),*/
                           )))
-                      :/* widget.netValue == false
-                          ? LoadingContainer()
-                          : */
-                     /* Image.network(
-                          widget.sellerModel!.sellerAvatarUrl!,
-                          height: MediaQuery.of(context).size.height * 0.3,
-                          width: MediaQuery.of(context).size.width,
-                          fit: BoxFit.fill,
-                          loadingBuilder: (BuildContext context, Widget child,
-                              ImageChunkEvent? loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return Center(
-                              child: /*CircularProgressIndicator*/ LoadingContainer(
-                                value: loadingProgress.expectedTotalBytes !=
-                                        null
-                                    ? loadingProgress.cumulativeBytesLoaded /
-                                        loadingProgress.expectedTotalBytes!
-                                    : null,
-                              ),
-                            );
-                          },
-                        ),*/
+                      :
 
                     CachedNetworkImage(
                       imageUrl: widget.sellerModel!.sellerAvatarUrl!,

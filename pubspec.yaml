@@ -55,7 +55,8 @@ dependencies:
   url_launcher:
   cached_network_image: ^3.2.0
   intl:
-  connectivity_plus:
+  lottie: ^2.3.2
+  #connectivity_plus:
 
 
 
@@ -85,6 +86,7 @@ flutter:
   assets:
     - assets/images/
     - slider/
+    - assets/animations/
   #   - images/a_dot_ham.jpeg
 
   fonts:

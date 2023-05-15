@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:foodfair/providers/cart_provider.dart';
@@ -60,9 +60,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Foodfair',
+      title: 'Food Shop',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.red,
       ),
       home: SplashScreen(),
       //initialRoute: SplashScreen(),

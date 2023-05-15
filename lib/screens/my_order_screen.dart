@@ -91,11 +91,6 @@ class _MyOrderSceenState extends State<MyOrderSceen> {
                                     data: snap.data!.docs,
                                     itemCount: snap.data!.docs.length,
                                     orderId: orderModel.orderId,
-                                    // itemQuantityList:
-                                    //     separateItemQuantityFromOrdersCollection(
-                                    //         (snapshot.data!.docs[index].data()!
-                                    //                 as Map<String, dynamic>)[
-                                    //             "productIDs"]),
                                   );
                           });
                     })

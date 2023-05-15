@@ -89,6 +89,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         title: const Text("Register form"),
         centerTitle: true,
         flexibleSpace: Container(

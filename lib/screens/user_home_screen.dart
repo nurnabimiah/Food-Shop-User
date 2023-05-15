@@ -61,11 +61,16 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
    super.didChangeDependencies();
   }
 
+
+
+
+
+
   @override
   Widget build(BuildContext context) {
     // print("user home screen");
     return Scaffold(
-      backgroundColor: ColorManager.lightPink,
+      //backgroundColor: ColorManager.lightPink,
       drawer: MyDrawer(),
       body: isLoading ? Center(child: CircularProgressIndicator(),) :
         CustomScrollView(
@@ -82,7 +87,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                   title: Transform(
                     // you can forcefully translate values left side using Transform
                     transform: Matrix4.translationValues(-20.0, 0.0, 0.0),
-                    child: Text("foodfair"),
+                    child: Text("Food Shop"),
                   ),
                   centerTitle: true,
                   flexibleSpace: flexibleSpaceBarMethod(),
@@ -132,6 +137,10 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     );
   }
 
+
+
+
+
   card() {
     return Stack(
       children: [
@@ -163,7 +172,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   flexibleSpaceBarMethod() {
    return FlexibleSpaceBar(
      background: Container(
-       decoration: const ContainerDecoration().decoaration(),
        child: Column(
          mainAxisAlignment: MainAxisAlignment.end,
          //crossAxisAlignment: CrossAxisAlignment.end,
@@ -186,11 +194,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                      ),
                      borderSide: BorderSide.none,
                    ),
-                   /*prefixIcon: const Icon(
-                                    Icons.search,
-                                    color: Colors.black,
-                                    //color: Colors.cyan,
-                                  ),*/
                    prefixIcon: const Align(
                      widthFactor: 0.5,
                      //heightFactor: 5.0,
@@ -225,6 +228,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
        width: MediaQuery.of(context).size.width,
        child: CarouselSlider(
          options: CarouselOptions(
+
+           autoPlay: true,
            height: MediaQuery.of(context).size.height * .3,
            aspectRatio: 16 / 9,
            viewportFraction: 0.8,
@@ -262,4 +267,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
      ),
    );
   }
+
+
 }

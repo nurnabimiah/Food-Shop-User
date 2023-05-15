@@ -40,7 +40,7 @@ class _AddressScreenState extends State<AddressScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("foodfair"),
+        title: Text("Food Shop"),
         centerTitle: true,
       ),
       floatingActionButton: SizedBox(
@@ -85,15 +85,11 @@ class _AddressScreenState extends State<AddressScreen> {
                       ),
                 Flexible(
                   child: ListView.builder(
-                      // itemCount: snapshot.data!.docs.length,
+
                       itemCount: _addressProvider.addressModellist.length,
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
                         print("indxe screen = $index");
-                        // AddressModel? addressModel = AddressModel.fromMap(
-                        //   snapshot.data!.docs[index].data()!
-                        //   as Map<String, dynamic>,
-                        // );
                         return AddressWidget(
                           currentAddressIndex:
                               _addressChangerProvider.radioButtonIndex,

@@ -44,10 +44,17 @@ class _PlacedOrderScreenState extends State<PlacedOrderScreen> {
     return SafeArea(
       child: Scaffold(
           body: Container(
-            decoration: ContainerDecoration().decoaration(),
+            decoration: BoxDecoration(
+              color: Colors.white
+            ),
             child: Column(
               children: [
                 Image.asset("assets/images/delivery.png"),
+
+
+
+
+
                 ElevatedButton(
                   child: const Text(
                     "Confirm",
@@ -57,7 +64,7 @@ class _PlacedOrderScreenState extends State<PlacedOrderScreen> {
                     ),
                   ),
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.purple[300],
+                     backgroundColor: Colors.red,
                     padding:
                         const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
                     shape: RoundedRectangleBorder(
@@ -86,9 +93,6 @@ class _PlacedOrderScreenState extends State<PlacedOrderScreen> {
                       discount: int.parse('${_orderProvider.orderConstantsModel.discount}'),
                     );
 
-                    // for(int i = 0; i<_orderModel.productIDs.length; i++){
-                    //   print("0 + productList = ${_orderModel.productIDs[i]} + AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-                    // }
 
                     await Provider.of<OrderProvider>(context, listen: false)
                         .addOrder(_orderModel, _cartProvider.cartModelList).then((value){
@@ -100,6 +104,7 @@ class _PlacedOrderScreenState extends State<PlacedOrderScreen> {
                           Fluttertoast.showToast(
                               msg: "Congratulations, Order has been placed successfully.");
                     });
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=> UserHomeScreen()));
                   },
                 ),
               ],

@@ -24,12 +24,10 @@ class _MyAppBarState extends State<MyAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      elevation: 0,
       title: const Text("foods"),
       centerTitle: true,
       //automaticallyImplyLeading: false,
-      flexibleSpace: Container(
-        decoration: const ContainerDecoration().decoaration(),
-      ),
       actions: [
         Stack(
           children: [

@@ -40,7 +40,7 @@ class _AddandRemoveIntoCartWidgetState
               : 'Add to cart',
         ),
         style: TextButton.styleFrom(
-          backgroundColor: Colors.teal,
+          backgroundColor: Colors.red,
           primary: Colors.white,
           //Primary: Colors.white,
           shape: const BeveledRectangleBorder(
